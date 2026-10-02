@@ -131,7 +131,7 @@ window.Reports = {
                 <i data-lucide="printer" class="w-4 h-4"></i>
               </div>
               <div class="text-xs">
-                <p class="font-bold text-amber-950">Thermal 80mm & A4 Ready</p>
+                <p class="font-bold text-amber-950">Thermal 80mm Ready</p>
                 <p class="text-amber-800/80 mt-0.5">Formatted for instant high-speed POS receipt printing.</p>
               </div>
             </div>
