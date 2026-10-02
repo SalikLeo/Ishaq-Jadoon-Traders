@@ -1353,7 +1353,6 @@ window.Companies = {
   },
 
   async loadTransactions() {
-    app.showLoading();
     try {
       this.dataList = await (this.currentTab === 'companies' ? window.api.getCompanies() : window.api.getCustomers()) || [];
       
@@ -1379,8 +1378,6 @@ window.Companies = {
     } catch (err) {
       console.error(err);
       app.showAlert("Error loading purchase transactions.");
-    } finally {
-      app.hideLoading();
     }
   },
 
