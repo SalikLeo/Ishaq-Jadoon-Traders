@@ -16,71 +16,129 @@ window.Reports = {
     this.settings = await window.api.getSettings();
     
     container.innerHTML = `
-      <div class="max-w-4xl mx-auto">
-        <div class="mb-8 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center shrink-0 shadow-2xs">
-            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+      <div>
+        <!-- Page Header -->
+        <div class="flex justify-between items-center mb-6 no-print flex-wrap gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center shrink-0 shadow-2xs">
+              <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-slate-800">Financial Reports</h2>
           </div>
-          <h2 class="text-3xl font-black text-slate-800 tracking-tight">Financial Reports</h2>
         </div>
 
-        <div class="mb-8">
-          <!-- Report Selection Card -->
-          <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-            <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <i data-lucide="settings-2" class="w-5 h-5 text-accent"></i>
-              Report Configuration
-            </h3>
+        <!-- Main Layout Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-8">
+          
+          <!-- Left Column (8 cols): Report Configuration -->
+          <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-4 px-6 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="sliders" class="w-4 h-4 text-amber-500"></i>
+                <h3 class="font-bold text-base text-slate-800">Report Configuration</h3>
+              </div>
+              <span class="text-xs font-semibold text-slate-400">Select period & parameters</span>
+            </div>
 
-            <div class="space-y-8">
-              <!-- Type Selection -->
+            <div class="p-6 space-y-6">
+              <!-- Step 1: Report Type Selection -->
               <div>
-                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Select Report Type</label>
-                <div class="grid grid-cols-3 gap-3">
-                  <button onclick="Reports.setType('daily')" id="type-daily" class="report-type-btn flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all group active-accent bg-accent border-accent text-slate-900 font-bold">
-                    <i data-lucide="calendar-days" class="w-6 h-6"></i>
-                    <span>Daily Report</span>
+                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3">1. Select Report Period Type</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <button type="button" onclick="Reports.setType('daily')" id="type-daily" class="report-type-btn flex items-center sm:flex-col justify-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white transition-all group font-bold cursor-pointer text-left sm:text-center">
+                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500">
+                      <i data-lucide="calendar-days" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                      <div class="font-black text-sm">Daily Report</div>
+                      <div class="text-[11px] opacity-75 font-medium mt-0.5">Day-by-day revenue & cost</div>
+                    </div>
                   </button>
-                  <button onclick="Reports.setType('monthly')" id="type-monthly" class="report-type-btn flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200 transition-all group font-bold">
-                    <i data-lucide="calendar-range" class="w-6 h-6"></i>
-                    <span>Monthly Report</span>
+
+                  <button type="button" onclick="Reports.setType('monthly')" id="type-monthly" class="report-type-btn flex items-center sm:flex-col justify-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white transition-all group font-bold cursor-pointer text-left sm:text-center">
+                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500">
+                      <i data-lucide="calendar-range" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                      <div class="font-black text-sm">Monthly Report</div>
+                      <div class="text-[11px] opacity-75 font-medium mt-0.5">Full calendar month summary</div>
+                    </div>
                   </button>
-                  <button onclick="Reports.setType('annual')" id="type-annual" class="report-type-btn flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200 transition-all group font-bold">
-                    <i data-lucide="calendar" class="w-6 h-6"></i>
-                    <span>Annual Report</span>
+
+                  <button type="button" onclick="Reports.setType('annual')" id="type-annual" class="report-type-btn flex items-center sm:flex-col justify-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white transition-all group font-bold cursor-pointer text-left sm:text-center">
+                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500">
+                      <i data-lucide="calendar" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                      <div class="font-black text-sm">Annual Report</div>
+                      <div class="text-[11px] opacity-75 font-medium mt-0.5">Full fiscal year breakdown</div>
+                    </div>
                   </button>
                 </div>
               </div>
 
-              <!-- Date Picker -->
-              <div id="date-picker-container">
-                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-4" id="picker-label">Select Day</label>
-                <div class="relative max-w-sm">
-                  <i data-lucide="calendar" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+              <!-- Step 2: Date Picker Input -->
+              <div id="date-picker-container" class="pt-2">
+                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2" id="picker-label">2. Select Day</label>
+                <div class="relative max-w-md">
+                  <i data-lucide="calendar" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
                   <input type="date" id="report-date-input" 
                     value="${this.selectedDate}" 
                     onchange="Reports.updateSelectedDate(this.value)"
-                    class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 pl-12 text-lg font-black text-slate-700 focus:bg-white focus:border-accent outline-none transition-all">
+                    class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-10 pr-4 text-sm font-bold text-slate-800 focus:bg-white focus:border-accent focus:ring-4 focus:ring-amber-50/50 outline-none transition-all shadow-2xs cursor-pointer">
                 </div>
               </div>
 
-              <div class="pt-4 border-t border-slate-50">
-                <button onclick="Reports.generate()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-xl transition-all active:scale-95 group">
-                  <i data-lucide="printer" class="w-6 h-6 text-accent group-hover:scale-110 transition-transform"></i>
-                  GENERATE & PRINT REPORT
+              <!-- Action button -->
+              <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button type="button" onclick="Reports.generate()" class="h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-black text-sm rounded-xl flex items-center gap-2.5 shadow-sm hover:shadow-md transition-all active:scale-95 cursor-pointer">
+                  <i data-lucide="printer" class="w-4 h-4 text-amber-400"></i>
+                  <span>Generate & Print Report</span>
                 </button>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Preview Area (Hidden normally, shown as preview if desired, but user asked for auto-print) -->
-        <div id="report-preview" class="hidden bg-white p-8 rounded-3xl border border-dashed border-slate-300 items-center justify-center text-slate-400">
-           <!-- Preview content -->
+          <!-- Right Column (4 cols): Information Card -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+              <h4 class="font-black text-sm text-slate-800 uppercase tracking-wider mb-3.5 flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 text-amber-500"></i>
+                What's Included in Report
+              </h4>
+              <div class="space-y-3 text-xs text-slate-600">
+                <div class="flex items-start gap-2.5">
+                  <div class="w-5 h-5 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 border border-emerald-200/60">1</div>
+                  <div><strong class="text-slate-800">Sales Summary:</strong> Total invoices, item units sold, gross sales revenue, and inventory cost.</div>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <div class="w-5 h-5 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 border border-blue-200/60">2</div>
+                  <div><strong class="text-slate-800">Operating Expenses:</strong> All recorded expenses, utility bills, salaries, and purchase vouchers.</div>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <div class="w-5 h-5 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 border border-amber-200/60">3</div>
+                  <div><strong class="text-slate-800">Net Profit / Loss:</strong> Exact margin calculations and true business net earnings.</div>
+                </div>
+                <div class="flex items-start gap-2.5">
+                  <div class="w-5 h-5 rounded-md bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 border border-purple-200/60">4</div>
+                  <div><strong class="text-slate-800">Supplier Balances:</strong> Up-to-date outstanding accounts payable summary.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-500/10 to-amber-600/5 rounded-2xl border border-amber-200/80 p-4 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 font-bold shadow-2xs">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+              </div>
+              <div class="text-xs">
+                <p class="font-bold text-amber-950">Thermal 80mm & A4 Ready</p>
+                <p class="text-amber-800/80 mt-0.5">Formatted for instant high-speed POS receipt printing.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <!-- Local style and container removed -->
     `;
 
     if (window.lucide) lucide.createIcons();
@@ -90,38 +148,44 @@ window.Reports = {
   setType(type) {
     this.reportType = type;
     
-    // Update UI
+    // Update UI buttons
     document.querySelectorAll('.report-type-btn').forEach(btn => {
-      btn.classList.remove('bg-accent', 'border-accent', 'text-slate-900');
-      btn.classList.add('border-slate-100', 'bg-slate-50', 'text-slate-500');
+      btn.className = 'report-type-btn flex items-center sm:flex-col justify-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white transition-all group font-bold cursor-pointer text-left sm:text-center';
+      const iconWrap = btn.querySelector('div:first-child');
+      if (iconWrap) iconWrap.className = 'w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500';
     });
 
     const activeBtn = document.getElementById(`type-${type}`);
-    activeBtn.classList.add('bg-accent', 'border-accent', 'text-slate-900');
-    activeBtn.classList.remove('border-slate-100', 'bg-slate-50', 'text-slate-500');
+    if (activeBtn) {
+      activeBtn.className = 'report-type-btn flex items-center sm:flex-col justify-center gap-3 p-4 rounded-xl border-2 border-amber-500 bg-amber-50/70 text-slate-950 shadow-xs transition-all group font-bold cursor-pointer text-left sm:text-center ring-1 ring-amber-400/40';
+      const iconWrap = activeBtn.querySelector('div:first-child');
+      if (iconWrap) iconWrap.className = 'w-9 h-9 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 font-bold shadow-2xs';
+    }
 
     const input = document.getElementById('report-date-input');
     const label = document.getElementById('picker-label');
+    if (!input || !label) return;
     
     if (type === 'daily') {
       input.type = 'date';
-      label.textContent = 'Select Day';
+      label.textContent = '2. Select Day';
       input.value = this.getLocalDateStr();
       this.selectedDate = input.value;
     } else if (type === 'monthly') {
       input.type = 'month';
-      label.textContent = 'Select Month';
+      label.textContent = '2. Select Month';
       const now = new Date();
       input.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
       this.selectedDate = input.value;
     } else if (type === 'annual') {
-      label.textContent = 'Select Year';
+      label.textContent = '2. Select Year';
       input.type = 'number';
       input.min = '2000';
       input.max = '2100';
       input.value = new Date().getFullYear();
       this.selectedDate = input.value;
     }
+    if (window.lucide) lucide.createIcons();
   },
 
   updateSelectedDate(val) {
