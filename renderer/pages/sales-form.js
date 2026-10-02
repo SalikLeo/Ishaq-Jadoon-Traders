@@ -148,8 +148,8 @@ window.SalesForm = {
                 ${this.editingSaleId ? `<span class="text-blue-400">EDIT INVOICE</span> #${this.saleNumber}` : 'ISHAQ JADOON TRADERS'}
               </h2>
             </div>
-            <div class="h-5 w-[1px] bg-slate-700"></div>
-            <div id="sf-live-clock" class="text-sm font-black text-amber-400 font-display tabular-nums tracking-wider">
+            <div class="h-4 w-[1px] bg-slate-700"></div>
+            <div id="sf-live-clock" class="text-xs font-bold text-amber-400 font-display tabular-nums tracking-wide">
               Loading...
             </div>
           </div>
