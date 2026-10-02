@@ -355,6 +355,22 @@ const Customers = window.Customers = {
     });
 
     this.filteredCustomers.sort((a, b) => {
+      if (term) {
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
+        const startsA = nameA.startsWith(term);
+        const startsB = nameB.startsWith(term);
+        if (startsA && !startsB) return -1;
+        if (!startsA && startsB) return 1;
+
+        const wordsA = nameA.split(/[\s\-&/]+/);
+        const wordsB = nameB.split(/[\s\-&/]+/);
+        const wordStartsA = wordsA.some(w => w.startsWith(term));
+        const wordStartsB = wordsB.some(w => w.startsWith(term));
+        if (wordStartsA && !wordStartsB) return -1;
+        if (!wordStartsA && wordStartsB) return 1;
+      }
+
       const aBal = Number(a.amount) || 0;
       const bBal = Number(b.amount) || 0;
       if (bBal !== aBal) {

@@ -543,11 +543,45 @@ window.SalesForm = {
       dropdown.classList.add('hidden');
       return;
     } else {
-      this.customerSearchResults = (this.customers || []).filter(c => {
+      const all = this.customers || [];
+      let matches = all.filter(c => {
         const name = (c.name || '').toLowerCase();
         const phone = (c.phone || '').toLowerCase();
         return name.includes(q) || phone.includes(q);
-      }).slice(0, 15);
+      });
+
+      // Sort by relevance:
+      // 1. Customer Name starts directly with query (e.g. "S...")
+      // 2. Any individual word in customer name starts with query (e.g. "M. SALMAN", "ADNAN SWEETS")
+      // 3. Customer Phone starts with query
+      // 4. Customer Phone includes query
+      // 5. Customer Name contains query elsewhere
+      matches.sort((a, b) => {
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
+        const phoneA = (a.phone || '').toLowerCase();
+        const phoneB = (b.phone || '').toLowerCase();
+
+        const getScore = (name, phone) => {
+          if (name.startsWith(q)) return 1;
+          const words = name.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(q))) return 2;
+          if (phone.startsWith(q)) return 3;
+          if (phone.includes(q)) return 4;
+          return 5;
+        };
+
+        const scoreA = getScore(nameA, phoneA);
+        const scoreB = getScore(nameB, phoneB);
+
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+
+        return nameA.localeCompare(nameB);
+      });
+
+      this.customerSearchResults = matches.slice(0, 15);
     }
 
     this.highlightedCustomerIndex = 0;
