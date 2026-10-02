@@ -215,7 +215,6 @@ window.ItemSales = {
                     <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-slate-400"></i>
                   </div>
                 </th>
-                <th class="px-4 py-2.5 border-r border-slate-200 bg-slate-50 font-black text-[11px] uppercase tracking-wider text-center w-28">Category</th>
                 <th class="px-4 py-2.5 border-r border-slate-200 bg-slate-50 font-black text-[11px] uppercase tracking-wider text-center w-20">Unit</th>
                 <th class="px-4 py-2.5 border-r border-slate-200 bg-slate-50 font-black text-[11px] uppercase tracking-wider text-center w-24 cursor-pointer hover:bg-slate-100 transition-colors" onclick="ItemSales.toggleColumnSort('qty')">
                   <div class="flex items-center justify-center gap-1">
@@ -237,8 +236,7 @@ window.ItemSales = {
                     <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-slate-400"></i>
                   </div>
                 </th>
-                <th class="px-4 py-2.5 border-r border-slate-200 text-center bg-slate-50 font-black text-[11px] uppercase tracking-wider w-20">Margin</th>
-                <th class="px-4 py-2.5 text-center text-slate-700 bg-slate-100 font-black text-[11px] uppercase tracking-wider w-24">Invoices</th>
+                <th class="px-4 py-2.5 text-center bg-slate-50 font-black text-[11px] uppercase tracking-wider w-20">Margin</th>
               </tr>
             </thead>
             <tbody id="item-sales-list-body" class="divide-y divide-slate-200 bg-white"></tbody>
@@ -584,7 +582,7 @@ window.ItemSales = {
     if (!tbody) return;
 
     if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="11" class="px-6 py-12 text-center text-slate-400 font-medium">No item sales recorded for this period.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-slate-400 font-medium">No item sales recorded for this period.</td></tr>`;
       return;
     }
 
@@ -593,20 +591,15 @@ window.ItemSales = {
       const avgPrice = item.totalQty > 0 ? (item.totalRevenue / item.totalQty) : 0;
       const margin = item.totalRevenue > 0 ? ((item.totalProfit / item.totalRevenue) * 100).toFixed(1) : '0.0';
       const catLabel = this.categoryLabels[item.section] || item.section.toUpperCase();
-      const isExpanded = this.expandedItems.has(item.key);
 
       rowsHtml += `
         <tr class="hover:bg-slate-50 transition-colors group border-b border-slate-200">
           <td class="px-2 py-2 text-center font-bold text-slate-400 tabular-nums border-r border-slate-200 text-xs">${idx + 1}</td>
           <td class="px-4 py-2 border-r border-slate-200">
-            <div class="font-bold text-slate-800 uppercase tracking-tight text-xs flex items-center gap-2">
+            <div class="font-bold text-slate-800 uppercase tracking-tight text-xs flex items-center gap-1.5 flex-wrap">
               <span>${item.description}</span>
+              <span class="text-slate-500 font-bold text-[11px] normal-case">(${catLabel})</span>
             </div>
-          </td>
-          <td class="px-4 py-2 border-r border-slate-200 text-center">
-            <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200/80 font-bold text-[10px] uppercase inline-block">
-              ${catLabel}
-            </span>
           </td>
           <td class="px-4 py-2 border-r border-slate-200 text-center font-bold text-slate-600 text-xs">${item.unit}</td>
           <td class="px-4 py-2 border-r border-slate-200 text-center">
@@ -626,73 +619,13 @@ window.ItemSales = {
           <td class="px-4 py-2 border-r border-slate-200 text-right font-black text-amber-700 text-xs tabular-nums">
             ${app.formatCurrency(item.totalProfit)}
           </td>
-          <td class="px-4 py-2 border-r border-slate-200 text-center">
+          <td class="px-4 py-2 text-center">
             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${Number(margin) >= 20 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-700 border border-slate-200'}">
               ${margin}%
             </span>
           </td>
-          <td class="px-4 py-2 text-center">
-            <button onclick="ItemSales.toggleExpand('${encodeURIComponent(item.key)}')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 mx-auto ${isExpanded ? 'bg-slate-900 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'} cursor-pointer" title="View Sales Breakdown">
-              <span>${item.invoicesCount}</span>
-              <i data-lucide="${isExpanded ? 'chevron-up' : 'chevron-down'}" class="w-3.5 h-3.5"></i>
-            </button>
-          </td>
         </tr>
       `;
-
-      // If row is expanded, render detailed invoice transactions
-      if (isExpanded) {
-        rowsHtml += `
-          <tr class="bg-slate-50/80 border-b border-slate-200">
-            <td colspan="11" class="p-4 pl-12">
-              <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-inner">
-                <div class="flex justify-between items-center mb-2 px-1">
-                  <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider">Invoices Breakdown for "${item.description}"</span>
-                  <span class="text-xs font-bold text-slate-400">${item.invoices.length} sales</span>
-                </div>
-                <table class="w-full text-xs text-left border-collapse">
-                  <thead>
-                    <tr class="border-b border-slate-200 text-[10px] uppercase font-bold text-slate-400 bg-slate-50">
-                      <th class="p-1.5">Invoice #</th>
-                      <th class="p-1.5">Date</th>
-                      <th class="p-1.5">Customer</th>
-                      <th class="p-1.5">Seller</th>
-                      <th class="p-1.5 text-center">Qty</th>
-                      <th class="p-1.5 text-right">Unit Rate</th>
-                      <th class="p-1.5 text-right">Total</th>
-                      <th class="p-1.5 text-center">Method</th>
-                      <th class="p-1.5 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-100">
-                    ${item.invoices.map(inv => `
-                      <tr class="hover:bg-slate-50">
-                        <td class="p-1.5 font-bold uppercase">${inv.proposal_number}</td>
-                        <td class="p-1.5 text-slate-600">${app.formatDateTime(inv.date)}</td>
-                        <td class="p-1.5 font-semibold text-slate-800 uppercase">${inv.customer_name}</td>
-                        <td class="p-1.5 text-slate-600">${inv.seller_name || '-'}</td>
-                        <td class="p-1.5 text-center font-bold">${inv.qty}</td>
-                        <td class="p-1.5 text-right font-medium">${app.formatAmount(inv.unit_discounted || inv.unit_retail)}</td>
-                        <td class="p-1.5 text-right font-bold text-emerald-700">${app.formatAmount(inv.line_retail)}</td>
-                        <td class="p-1.5 text-center">
-                          <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${inv.payment_method === 'Online' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">
-                            ${inv.payment_method || 'Cash'}
-                          </span>
-                        </td>
-                        <td class="p-1.5 text-right">
-                          <button onclick="ItemSales.viewInvoiceReceipt(${inv.proposal_id})" class="px-2 py-0.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded text-[10px] font-bold cursor-pointer transition-colors" title="View Receipt">
-                            View Receipt
-                          </button>
-                        </td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-            </td>
-          </tr>
-        `;
-      }
     });
 
     tbody.innerHTML = rowsHtml;
@@ -790,7 +723,7 @@ window.ItemSales = {
       ` : list.map((item, idx, arr) => `
         <tr style="border-bottom: ${idx === arr.length - 1 ? 'none' : '1px solid #000'}; font-size: 9.5px;">
           <td style="padding: 2.5px 2px; text-align: center; font-weight: 700; border-right: 1px solid #000;">${idx + 1}</td>
-          <td style="padding: 2.5px 4px; text-align: left; font-weight: 800; word-break: break-word; line-height: 1.2; border-right: 1px solid #000;">${item.description}</td>
+          <td style="padding: 2.5px 4px; text-align: left; font-weight: 800; word-break: break-word; line-height: 1.2; border-right: 1px solid #000;">${item.description} (${this.categoryLabels[item.section] || item.section.toUpperCase()})</td>
           <td style="padding: 2.5px 2px; text-align: center; font-weight: 800; white-space: nowrap; border-right: 1px solid #000;">${item.totalQty}</td>
           <td style="padding: 2.5px 3px; text-align: right; font-weight: 600; white-space: nowrap; border-right: 1px solid #000;">${app.formatAmount(item.totalRevenue / (item.totalQty || 1))}</td>
           <td style="padding: 2.5px 4px; text-align: right; font-weight: 800; white-space: nowrap;">${app.formatAmount(item.totalRevenue)}</td>
