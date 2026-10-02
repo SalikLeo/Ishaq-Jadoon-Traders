@@ -251,7 +251,7 @@ const RateList = {
             <span class="text-[10px] font-black uppercase tracking-wider text-slate-500">In-Stock Qty</span>
             <div class="mt-2">
               <div class="text-xl font-black text-slate-900">${stock} <span class="text-xs font-bold text-slate-500">${item.unit || 'pcs'}</span></div>
-              <div class="text-[10px] font-semibold text-slate-500 mt-0.5 truncate">Value: <span class="text-slate-800 font-bold">Rs. ${stockValuation.toLocaleString()}</span></div>
+              <div class="text-[10px] font-semibold text-slate-500 mt-0.5 truncate">Value: <span class="text-slate-800 font-bold">${stockValuation.toLocaleString()}</span></div>
             </div>
           </div>
 
@@ -259,7 +259,7 @@ const RateList = {
           <div class="bg-gradient-to-br from-sky-50/50 to-sky-100/40 p-3.5 rounded-xl border border-sky-200/80 shadow-xs flex flex-col justify-between">
             <span class="text-[10px] font-black uppercase tracking-wider text-sky-800">Latest Cost Price</span>
             <div class="mt-2">
-              <div id="ratelist-latest-cost-val" class="text-xl font-black text-sky-950">Rs. ${latestCost.toLocaleString()}</div>
+              <div id="ratelist-latest-cost-val" class="text-xl font-black text-sky-950">${latestCost.toLocaleString()}</div>
               <div class="text-[10px] font-bold text-sky-700/80 mt-0.5">Last Purchase Rate</div>
             </div>
           </div>
@@ -268,7 +268,7 @@ const RateList = {
           <div class="bg-gradient-to-br from-amber-50/40 to-amber-100/30 p-3.5 rounded-xl border border-amber-200/70 shadow-xs flex flex-col justify-between">
             <span class="text-[10px] font-black uppercase tracking-wider text-amber-800">Avg Cost Price</span>
             <div class="mt-2">
-              <div class="text-xl font-black text-amber-950">Rs. ${cost.toLocaleString()}</div>
+              <div class="text-xl font-black text-amber-950">${cost.toLocaleString()}</div>
               <div class="text-[10px] font-bold text-amber-700/80 mt-0.5">Weighted Avg Cost</div>
             </div>
           </div>
@@ -277,7 +277,7 @@ const RateList = {
           <div class="bg-gradient-to-br from-indigo-50/40 to-indigo-100/30 p-3.5 rounded-xl border border-indigo-200/70 shadow-xs flex flex-col justify-between">
             <span class="text-[10px] font-black uppercase tracking-wider text-indigo-800">Sale Price</span>
             <div class="mt-2">
-              <div class="text-xl font-black text-indigo-950">Rs. ${retail.toLocaleString()}</div>
+              <div class="text-xl font-black text-indigo-950">${retail.toLocaleString()}</div>
               <div class="text-[10px] font-semibold text-indigo-700/80 mt-0.5">Fixed Sale Rate</div>
             </div>
           </div>
@@ -286,7 +286,7 @@ const RateList = {
           <div class="bg-gradient-to-br from-emerald-50/40 to-emerald-100/30 p-3.5 rounded-xl border border-emerald-200/70 shadow-xs flex flex-col justify-between">
             <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800">Profit</span>
             <div class="mt-2">
-              <div class="text-xl font-black text-emerald-950">Rs. ${margin.toLocaleString()}</div>
+              <div class="text-xl font-black text-emerald-950">${margin.toLocaleString()}</div>
               <div class="text-[10px] font-extrabold ${margin >= 0 ? 'text-emerald-700' : 'text-rose-600'} mt-0.5">
                 ${marginPct > 0 ? '+' : ''}${marginPct}% Net Profit
               </div>
@@ -441,7 +441,7 @@ const RateList = {
     const latestCostElem = document.getElementById('ratelist-latest-cost-val');
     if (latestCostElem) {
       const val = latestLog ? Number(latestLog.purchase_price) : (this.selectedItem?.last_purchase_price || this.selectedItem?.cost_price || 0);
-      latestCostElem.innerText = `Rs. ${Number(val).toLocaleString()}`;
+      latestCostElem.innerText = `${Number(val).toLocaleString()}`;
     }
 
     const histTbody = document.getElementById('ratelist-history-tbody');
