@@ -267,29 +267,27 @@ const Customers = window.Customers = {
   },
 
   async loadData() {
-    app.showLoading();
     try {
       this.customers = await window.api.getCustomers() || [];
       this.proposals = await window.api.getProposals() || [];
 
       this.updateStats();
-      this.applyFilters();
 
-      // Auto select the first customer if none selected or if previous selection still exists
+      // Determine selected customer
       if (this.customers.length > 0) {
         if (!this.selectedCustomerId || !this.customers.some(c => c.id === this.selectedCustomerId)) {
-          this.selectCustomer(this.filteredCustomers[0]?.id || this.customers[0].id);
-        } else {
-          this.selectCustomer(this.selectedCustomerId);
+          this.selectedCustomerId = this.customers[0]?.id || null;
         }
       } else {
-        this.renderRightLedger(null);
+        this.selectedCustomerId = null;
       }
+
+      this.applyFilters();
+      const customer = this.customers.find(c => c.id === this.selectedCustomerId);
+      this.renderRightLedger(customer || null);
     } catch (e) {
       console.error(e);
       app.showAlert("Error loading customers data.");
-    } finally {
-      app.hideLoading();
     }
   },
 
