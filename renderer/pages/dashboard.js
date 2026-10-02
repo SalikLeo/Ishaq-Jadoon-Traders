@@ -127,40 +127,6 @@ const Dashboard = {
 
       <div id="dashboard-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 transition-opacity duration-200">
         <!-- Stats loading placeholder -->
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div onclick="app.navigate('proposal-form', { isNew: true })" class="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl shadow-lg shadow-blue-100 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group overflow-hidden relative border border-blue-500">
-          <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform">
-             <i data-lucide="file-plus" class="w-32 h-32 text-white"></i>
-          </div>
-          <div class="relative z-10 flex flex-col gap-2">
-            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-white">
-              <i data-lucide="file-plus" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <h4 class="text-xl font-black text-white uppercase tracking-tight font-display">New Sale</h4>
-              <p class="text-blue-50 text-sm font-medium">Create a new sale invoice for a customer.</p>
-            </div>
-          </div>
-        </div>
-
-        <div onclick="app.navigate('expenses', { openForm: true })" class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl shadow-lg shadow-slate-200 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group overflow-hidden relative border border-slate-700">
-          <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform">
-             <i data-lucide="receipt" class="w-32 h-32 text-white"></i>
-          </div>
-          <div class="relative z-10 flex flex-col gap-2">
-            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white">
-              <i data-lucide="receipt" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <h4 class="text-xl font-black text-white uppercase tracking-tight font-display">Add Expense</h4>
-              <p class="text-slate-400 text-sm font-medium">Record a new business expense or salary payment.</p>
-            </div>
-          </div>
-        </div>
-      </div>
     `;
 
     // Initialize controls state & load initial stats
