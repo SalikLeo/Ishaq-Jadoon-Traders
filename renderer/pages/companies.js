@@ -71,8 +71,9 @@ window.Companies = {
         <!-- Filters Row -->
         <div class="bg-white p-2.5 rounded-xl shadow-sm border border-slate-100 mb-3 flex gap-2.5 items-center flex-wrap">
           <div class="relative flex-1 min-w-[200px]">
-            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2 text-slate-400"></i>
-            <input type="text" id="txns-main-search" oninput="Companies.filterTransactions()" placeholder="Search invoice #, supplier name, item..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="txns-main-search" oninput="Companies.filterTransactions()" placeholder="Search invoice #, supplier name, item..." class="w-full pl-9 pr-8 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+            <button type="button" id="txns-search-clear-btn" onclick="Companies.clearTxnsSearch()" title="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
           </div>
 
           <!-- Type filter dropdown -->
@@ -197,8 +198,9 @@ window.Companies = {
         <!-- Filters Row -->
         <div class="bg-white p-2.5 rounded-xl shadow-sm border border-slate-100 mb-3 flex gap-2.5 items-center flex-wrap">
           <div class="relative flex-1 min-w-[180px]">
-            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2 text-slate-400"></i>
-            <input type="text" id="khata-search" oninput="Companies.applyFilters()" placeholder="Search by name or contact..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="khata-search" oninput="Companies.applyFilters()" placeholder="Search by name or contact..." class="w-full pl-9 pr-8 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+            <button type="button" id="khata-search-clear-btn" onclick="Companies.clearKhataSearch()" title="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
           </div>
 
           <!-- Period controls for Companies -->
@@ -384,8 +386,9 @@ window.Companies = {
                     <option value="month">This Month</option>
                 </select>
                 <div class="relative w-64">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-                    <input type="text" id="history-search" oninput="Companies.filterHistory()" placeholder="Search invoice, amount..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition-all text-xs font-bold">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="history-search" oninput="Companies.filterHistory()" placeholder="Search invoice, amount..." class="w-full pl-9 pr-8 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition-all text-xs font-bold">
+                    <button type="button" id="history-search-clear-btn" onclick="Companies.clearHistorySearch()" title="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                 </div>
             </div>
 
@@ -512,8 +515,9 @@ window.Companies = {
             
             <div class="flex-1 max-w-sm mx-4">
                 <div class="relative">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-                    <input type="text" id="all-txns-search" oninput="Companies.filterAllTxns()" placeholder="Search by name, invoice, amount..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition-all text-xs font-bold">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="all-txns-search" oninput="Companies.filterAllTxns()" placeholder="Search by name, invoice, amount..." class="w-full pl-9 pr-8 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition-all text-xs font-bold">
+                    <button type="button" id="all-txns-search-clear-btn" onclick="Companies.clearAllTxnsSearch()" title="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                 </div>
             </div>
 
@@ -597,8 +601,25 @@ window.Companies = {
     if (window.lucide) lucide.createIcons();
   },
 
+  clearKhataSearch() {
+    const input = document.getElementById('khata-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applyFilters();
+  },
+
   applyFilters() {
-    const term = document.getElementById('khata-search')?.value.toLowerCase() || '';
+    const searchInput = document.getElementById('khata-search');
+    const clearBtn = document.getElementById('khata-search-clear-btn');
+    const term = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const sortBy = document.getElementById('khata-sort')?.value || 'balance_desc';
     const selDate = document.getElementById('comp-date-picker')?.value;
 
@@ -965,9 +986,26 @@ window.Companies = {
     if (window.lucide) lucide.createIcons();
   },
 
+  clearHistorySearch() {
+    const input = document.getElementById('history-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.filterHistory();
+  },
+
   filterHistory() {
-    const query = document.getElementById('history-search').value.toLowerCase();
-    const timeFilter = document.getElementById('history-time-filter').value;
+    const searchInput = document.getElementById('history-search');
+    const clearBtn = document.getElementById('history-search-clear-btn');
+    const query = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
+    const timeFilter = document.getElementById('history-time-filter')?.value || 'all';
     if (!this.currentHistory) return;
 
     let filtered = this.currentHistory;
@@ -1146,8 +1184,25 @@ window.Companies = {
     if (window.lucide) lucide.createIcons();
   },
 
+  clearAllTxnsSearch() {
+    const input = document.getElementById('all-txns-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.filterAllTxns();
+  },
+
   filterAllTxns() {
-    const query = document.getElementById('all-txns-search').value.toLowerCase();
+    const searchInput = document.getElementById('all-txns-search');
+    const clearBtn = document.getElementById('all-txns-search-clear-btn');
+    const query = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     if (!this.fullTxnHistory) return;
     
     const filtered = this.fullTxnHistory.filter(t => {
@@ -1613,9 +1668,26 @@ window.Companies = {
     this.applyFilters();
   },
 
+  clearTxnsSearch() {
+    const input = document.getElementById('txns-main-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.filterTransactions();
+  },
+
   filterTransactions() {
     if (!this.fullTxnHistory) return;
-    const query = document.getElementById('txns-main-search')?.value.toLowerCase().trim() || '';
+    const searchInput = document.getElementById('txns-main-search');
+    const clearBtn = document.getElementById('txns-search-clear-btn');
+    const query = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const typeFilter = document.getElementById('txns-type-select')?.value || this.txnsFilterType || 'all';
     this.txnsFilterType = typeFilter;
     const selDate = document.getElementById('txns-date-picker')?.value;

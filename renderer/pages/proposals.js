@@ -83,8 +83,9 @@ window.Proposals = {
       <!-- Filter Controls Bar -->
       <div class="bg-white p-3.5 rounded-xl shadow-sm border border-slate-200 mb-6 flex gap-4 items-center flex-wrap">
         <div class="relative flex-1 min-w-[200px]">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
-          <input type="text" id="prop-search" oninput="Proposals.applyFilters()" placeholder="Search by customer, invoice #, or seller" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="prop-search" oninput="Proposals.applyFilters()" placeholder="Search by customer, invoice #, or seller" class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+          <button type="button" id="prop-search-clear-btn" onclick="Proposals.clearSearch()" title="Clear search" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
         </div>
         
         <div class="flex gap-4 items-center pl-4 border-l border-slate-200 flex-wrap">
@@ -257,8 +258,25 @@ window.Proposals = {
     return null;
   },
 
+  clearSearch() {
+    const input = document.getElementById('prop-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applyFilters();
+  },
+
   applyFilters() {
-    const term = document.getElementById('prop-search')?.value.toLowerCase() || '';
+    const searchInput = document.getElementById('prop-search');
+    const clearBtn = document.getElementById('prop-search-clear-btn');
+    const term = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const selDate = document.getElementById('stats-date-picker')?.value;
     
     let filtered = this.sales.filter(s => {

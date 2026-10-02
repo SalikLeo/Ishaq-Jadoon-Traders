@@ -507,6 +507,11 @@ window.SalesForm = {
     const input = document.getElementById('sf-customer-name');
     if (input && !input.readOnly) {
       const val = (input.value || '').trim();
+      const clearBtn = document.getElementById('sf-customer-clear-btn');
+      if (clearBtn) {
+        if (val.length > 0) clearBtn.classList.remove('hidden');
+        else clearBtn.classList.add('hidden');
+      }
       if (val.length > 0) {
         this.handleCustomerInput(val);
       } else {
@@ -524,6 +529,13 @@ window.SalesForm = {
   handleCustomerInput(val) {
     const q = (val || '').trim().toLowerCase();
     const dropdown = document.getElementById('sf-customer-dropdown');
+    const clearBtn = document.getElementById('sf-customer-clear-btn');
+
+    if (clearBtn) {
+      if ((val || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     if (!dropdown) return;
 
     if (q.length === 0) {

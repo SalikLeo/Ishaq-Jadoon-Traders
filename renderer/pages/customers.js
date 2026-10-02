@@ -85,7 +85,14 @@ const Customers = window.Customers = {
                        id="cust-search-input" 
                        oninput="Customers.applyFilters()" 
                        placeholder="Search customer or phone..." 
-                       class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 transition-all">
+                       class="w-full pl-9 pr-8 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 transition-all">
+                <button type="button" 
+                        id="cust-search-clear-btn" 
+                        onclick="Customers.clearSearch()" 
+                        title="Clear search"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
               </div>
 
               <div class="flex items-center justify-between gap-2">
@@ -311,8 +318,25 @@ const Customers = window.Customers = {
     if (receivedEl) receivedEl.textContent = app.formatCurrency(totalReceived);
   },
 
+  clearSearch() {
+    const input = document.getElementById('cust-search-input');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applyFilters();
+  },
+
   applyFilters() {
-    const term = (document.getElementById('cust-search-input')?.value || '').toLowerCase().trim();
+    const searchInput = document.getElementById('cust-search-input');
+    const clearBtn = document.getElementById('cust-search-clear-btn');
+    const term = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const balanceFilter = document.getElementById('cust-filter-balance')?.value || 'all';
 
     this.filteredCustomers = this.customers.filter(c => {

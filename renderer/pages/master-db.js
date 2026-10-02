@@ -58,7 +58,8 @@ const MasterDB = {
             <input type="text" id="db-search" 
               oninput="MasterDB.onSearchInput()"
               placeholder="Search item name..." 
-              class="w-full h-10 bg-white border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-sm focus:border-accent focus:ring-4 focus:ring-amber-50/50 transition-all outline-none shadow-sm font-medium">
+              class="w-full h-10 bg-white border border-slate-200 rounded-xl py-2 pl-10 pr-9 text-sm focus:border-accent focus:ring-4 focus:ring-amber-50/50 transition-all outline-none shadow-sm font-medium">
+            <button type="button" id="db-search-clear-btn" onclick="MasterDB.clearDbSearch()" title="Clear search" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
           </div>
           <div class="flex items-center gap-2 no-print shrink-0">
             <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
@@ -306,7 +307,8 @@ const MasterDB = {
               <input type="text" id="sales-search" 
                 oninput="MasterDB.applySalesFilters()"
                 placeholder="Search items..." 
-                class="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-9 pr-3 text-xs font-medium focus:bg-white focus:border-accent focus:ring-2 focus:ring-amber-50/50 transition-all outline-none">
+                class="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-9 pr-8 text-xs font-medium focus:bg-white focus:border-accent focus:ring-2 focus:ring-amber-50/50 transition-all outline-none">
+              <button type="button" id="sales-search-clear-btn" onclick="MasterDB.clearSalesSearch()" title="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
             </div>
 
             <div class="flex items-center gap-2">
@@ -385,7 +387,8 @@ const MasterDB = {
           <div class="mb-4 flex flex-wrap gap-4 items-center shrink-0">
             <div class="relative flex-1 min-w-[200px]">
               <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-              <input type="text" id="prof-search" oninput="MasterDB.applyProfitsFilters()" placeholder="Search by customer name or proposal #..." class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-2 pl-10 pr-4 text-sm focus:bg-white focus:border-accent outline-none">
+              <input type="text" id="prof-search" oninput="MasterDB.applyProfitsFilters()" placeholder="Search by customer name or proposal #..." class="w-full bg-slate-50 border-2 border-slate-100 rounded-xl py-2 pl-10 pr-9 text-sm focus:bg-white focus:border-accent outline-none">
+              <button type="button" id="prof-search-clear-btn" onclick="MasterDB.clearProfSearch()" title="Clear search" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
             </div>
 
             <select id="prof-status-filter" onchange="MasterDB.applyProfitsFilters()" class="bg-slate-50 border-2 border-slate-100 rounded-xl py-2 px-4 text-xs font-bold text-slate-700 focus:bg-white focus:border-accent cursor-pointer outline-none w-36">
@@ -630,7 +633,8 @@ const MasterDB = {
           <div class="p-3 bg-white border-b border-slate-100 flex items-center gap-3 flex-wrap shrink-0">
             <div class="relative flex-1 min-w-[220px]">
               <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-              <input type="text" id="rate-list-search" oninput="MasterDB.applyRateListFilters()" placeholder="Search item name, category..." class="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:bg-white focus:border-emerald-500 outline-none">
+              <input type="text" id="rate-list-search" oninput="MasterDB.applyRateListFilters()" placeholder="Search item name, category..." class="w-full pl-9 pr-8 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:bg-white focus:border-emerald-500 outline-none">
+              <button type="button" id="rate-list-search-clear-btn" onclick="MasterDB.clearRateListSearch()" title="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
             </div>
 
             <div class="flex items-center gap-2">
@@ -734,14 +738,37 @@ const MasterDB = {
     this.applySearch();
   },
 
+  clearDbSearch() {
+    const input = document.getElementById('db-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applySearch();
+  },
+
   onSearchInput() {
+    const input = document.getElementById('db-search');
+    const clearBtn = document.getElementById('db-search-clear-btn');
+    if (clearBtn) {
+      if ((input?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
     if (this._searchDebounce) clearTimeout(this._searchDebounce);
     this._searchDebounce = setTimeout(() => this.applySearch(), 90);
   },
 
   applySearch() {
     this.displayLimit = this.pageSize;
-    const query = (document.getElementById('db-search')?.value || '').toLowerCase().trim();
+    const searchInput = document.getElementById('db-search');
+    const clearBtn = document.getElementById('db-search-clear-btn');
+    const query = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const lowStockVal = document.getElementById('db-low-stock-filter')?.value;
     const cat = this.currentCategory === 'all'
       ? { label: 'All Items', fields: ['item_name'] }
@@ -1419,8 +1446,25 @@ const MasterDB = {
     if(apply) this.applyProfitsFilters();
   },
 
+  clearProfSearch() {
+    const input = document.getElementById('prof-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applyProfitsFilters();
+  },
+
   applyProfitsFilters() {
-     const term = document.getElementById('prof-search').value.toLowerCase();
+     const searchInput = document.getElementById('prof-search');
+     const clearBtn = document.getElementById('prof-search-clear-btn');
+     const term = (searchInput?.value || '').toLowerCase().trim();
+
+     if (clearBtn) {
+       if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+       else clearBtn.classList.add('hidden');
+     }
+
      const statusFilter = document.getElementById('prof-status-filter').value;
      const sort = document.getElementById('prof-sort').value;
      
@@ -1611,10 +1655,27 @@ const MasterDB = {
     this.loadSalesData();
   },
 
+  clearSalesSearch() {
+    const input = document.getElementById('sales-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applySalesFilters();
+  },
+
   applySalesFilters() {
-    const query = document.getElementById('sales-search').value.toLowerCase();
-    const sortBy = document.getElementById('sales-sort').value;
-    const catFilter = document.getElementById('sales-cat-filter').value;
+    const searchInput = document.getElementById('sales-search');
+    const clearBtn = document.getElementById('sales-search-clear-btn');
+    const query = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
+    const sortBy = document.getElementById('sales-sort')?.value || 'revenue_desc';
+    const catFilter = document.getElementById('sales-cat-filter')?.value || 'all';
     
     let data = [...this._lastSalesData];
     
@@ -2373,10 +2434,27 @@ const MasterDB = {
     }, 150);
   },
 
+  clearRateListSearch() {
+    const input = document.getElementById('rate-list-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applyRateListFilters();
+  },
+
   applyRateListFilters() {
     if (!this.rateListItems) return;
 
-    const q = (document.getElementById('rate-list-search')?.value || '').trim().toLowerCase();
+    const searchInput = document.getElementById('rate-list-search');
+    const clearBtn = document.getElementById('rate-list-search-clear-btn');
+    const q = (searchInput?.value || '').trim().toLowerCase();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const cat = document.getElementById('rate-list-cat-filter')?.value || 'all';
     const sort = document.getElementById('rate-list-sort')?.value || 'name_asc';
 

@@ -57,7 +57,14 @@ const RateList = {
                   value="${this.searchQuery}"
                   oninput="RateList.onSearch(this.value)" 
                   placeholder="Search item name or code..." 
-                  class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-accent focus:ring-2 focus:ring-amber-100 transition-all">
+                  class="w-full pl-9 pr-9 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:border-accent focus:ring-2 focus:ring-amber-100 transition-all">
+                <button type="button" 
+                        id="ratelist-search-clear-btn" 
+                        onclick="RateList.clearSearch()" 
+                        title="Clear search" 
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer ${this.searchQuery ? '' : 'hidden'}">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
               </div>
 
               <!-- Category Filter Pills (Multi-line Wrap) -->
@@ -499,8 +506,22 @@ const RateList = {
     }
   },
 
+  clearSearch() {
+    const input = document.getElementById('ratelist-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.onSearch('');
+  },
+
   onSearch(query) {
     this.searchQuery = query;
+    const clearBtn = document.getElementById('ratelist-search-clear-btn');
+    if (clearBtn) {
+      if ((query || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
     this.displayLimit = this.pageSize;
     this.applyFilter();
     this.updateTable();

@@ -103,8 +103,9 @@ window.ItemSales = {
       <div class="bg-white p-3.5 rounded-xl shadow-sm border border-slate-200 mb-6 flex gap-3 items-center flex-wrap">
         <!-- Search -->
         <div class="relative flex-1 min-w-[220px]">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
-          <input type="text" id="item-search" oninput="ItemSales.applyFilters()" placeholder="Search by item name, description, section, invoice..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="item-search" oninput="ItemSales.applyFilters()" placeholder="Search by item name, description, section, invoice..." class="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white transition-all text-xs font-medium">
+          <button type="button" id="item-search-clear-btn" onclick="ItemSales.clearSearch()" title="Clear search" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
         </div>
         
         <div class="flex gap-3 items-center flex-wrap pl-2 border-l border-slate-200">
@@ -441,8 +442,25 @@ window.ItemSales = {
     this.applyFilters();
   },
 
+  clearSearch() {
+    const input = document.getElementById('item-search');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    this.applyFilters();
+  },
+
   applyFilters() {
-    const term = document.getElementById('item-search')?.value.toLowerCase() || '';
+    const searchInput = document.getElementById('item-search');
+    const clearBtn = document.getElementById('item-search-clear-btn');
+    const term = (searchInput?.value || '').toLowerCase().trim();
+
+    if (clearBtn) {
+      if ((searchInput?.value || '').length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+
     const selDate = document.getElementById('item-stats-date-picker')?.value;
     const selCat = document.getElementById('item-cat-select')?.value || 'All';
     const selMethod = document.getElementById('item-method-select')?.value || 'All';
