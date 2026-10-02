@@ -27,10 +27,6 @@ window.ItemSales = {
             <i data-lucide="eye" class="w-4 h-4 text-slate-400" id="item-stats-toggle-icon"></i>
             <span id="item-stats-toggle-text">Show Stats</span>
           </button>
-          <button onclick="ItemSales.printReport()" class="h-10 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-95 cursor-pointer">
-            <i data-lucide="printer" class="w-4 h-4 text-amber-400"></i>
-            <span>Print A5 Report</span>
-          </button>
         </div>
       </div>
       
