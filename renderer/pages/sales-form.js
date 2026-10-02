@@ -258,9 +258,16 @@ window.SalesForm = {
                      onclick="SalesForm.handleSearchFocus()"
                      onkeydown="SalesForm.handleSearchKeyDown(event)"
                      placeholder="Search item name or category..." 
-                     class="w-full pl-12 pr-32 py-3 bg-transparent text-slate-900 font-bold text-sm outline-none placeholder:text-slate-400">
-              <div class="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center">
-                <kbd class="px-2 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[10px] font-black shadow-2xs">Press F2 Key</kbd>
+                     class="w-full pl-12 pr-36 py-3 bg-transparent text-slate-900 font-bold text-sm outline-none placeholder:text-slate-400">
+              <div class="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                <button type="button" 
+                        id="sf-item-search-clear-btn" 
+                        onclick="SalesForm.clearSearchInput()" 
+                        title="Clear search text"
+                        class="w-6 h-6 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-all cursor-pointer hidden">
+                  <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+                <kbd class="px-2 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[10px] font-black shadow-2xs pointer-events-none select-none">Press F2 Key</kbd>
               </div>
             </div>
 
@@ -783,10 +790,31 @@ window.SalesForm = {
   },
 
   // --- Instant Keyboard-Driven Item Search & Dropdown (Tight Single Line) ---
+  clearSearchInput() {
+    const input = document.getElementById('sf-fast-item-search');
+    const clearBtn = document.getElementById('sf-item-search-clear-btn');
+    const dropdown = document.getElementById('sf-search-dropdown');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    if (clearBtn) {
+      clearBtn.classList.add('hidden');
+    }
+    this.searchResults = [];
+    this.highlightedSearchIndex = 0;
+    if (dropdown) dropdown.classList.add('hidden');
+  },
+
   handleSearchFocus() {
     const input = document.getElementById('sf-fast-item-search');
     if (input) {
       const val = (input.value || '').trim();
+      const clearBtn = document.getElementById('sf-item-search-clear-btn');
+      if (clearBtn) {
+        if (val.length > 0) clearBtn.classList.remove('hidden');
+        else clearBtn.classList.add('hidden');
+      }
       if (val.length > 0) {
         this.handleSearchInput(val);
       } else {
@@ -799,6 +827,16 @@ window.SalesForm = {
   handleSearchInput(value) {
     const q = (value || '').trim().toLowerCase();
     const dropdown = document.getElementById('sf-search-dropdown');
+    const clearBtn = document.getElementById('sf-item-search-clear-btn');
+
+    if (clearBtn) {
+      if ((value || '').length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+    }
+
     if (!dropdown) return;
 
     if (q.length === 0) {
@@ -996,8 +1034,10 @@ window.SalesForm = {
     this.addToCart(item);
 
     const searchInput = document.getElementById('sf-fast-item-search');
+    const clearBtn = document.getElementById('sf-item-search-clear-btn');
     const dropdown = document.getElementById('sf-search-dropdown');
     if (searchInput) searchInput.value = '';
+    if (clearBtn) clearBtn.classList.add('hidden');
     if (dropdown) dropdown.classList.add('hidden');
     this.searchResults = [];
     this.highlightedSearchIndex = 0;
