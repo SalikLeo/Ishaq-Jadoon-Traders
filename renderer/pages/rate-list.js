@@ -146,6 +146,33 @@ const RateList = {
       return matchCat && matchQuery;
     });
 
+    if (q) {
+      this.filteredItems.sort((a, b) => {
+        const nameA = String(a.item_name || '').toLowerCase();
+        const nameB = String(b.item_name || '').toLowerCase();
+        const descA = String(a.description || '').toLowerCase();
+        const descB = String(b.description || '').toLowerCase();
+
+        const getScore = (name, desc) => {
+          if (name.startsWith(q)) return 1;
+          const words = name.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(q))) return 2;
+          if (desc.startsWith(q)) return 3;
+          if (desc.split(/[\s\-&/]+/).some(w => w.startsWith(q))) return 4;
+          return 5;
+        };
+
+        const scoreA = getScore(nameA, descA);
+        const scoreB = getScore(nameB, descB);
+
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+
+        return nameA.localeCompare(nameB);
+      });
+    }
+
     if (this.selectedItem) {
       const updated = this.items.find(i => i.slug === this.selectedItem.slug && i.id === this.selectedItem.id);
       if (updated) this.selectedItem = updated;

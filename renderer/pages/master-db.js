@@ -778,7 +778,38 @@ const MasterDB = {
     if (query) {
         filtered = filtered.filter(p => {
             return String(p.item_name || '').toLowerCase().includes(query) ||
-                   String(p.description || '').toLowerCase().includes(query);
+                   String(p.description || '').toLowerCase().includes(query) ||
+                   String(p.company_name || '').toLowerCase().includes(query);
+        });
+
+        // Priority sort by search relevance:
+        // 1. item_name starts with query (e.g. "Catry..." when typing "cat")
+        // 2. any word in item_name starts with query
+        // 3. description starts with query or word in description starts with query
+        // 4. general substring match
+        filtered.sort((a, b) => {
+          const nameA = String(a.item_name || '').toLowerCase();
+          const nameB = String(b.item_name || '').toLowerCase();
+          const descA = String(a.description || '').toLowerCase();
+          const descB = String(b.description || '').toLowerCase();
+
+          const getScore = (name, desc) => {
+            if (name.startsWith(query)) return 1;
+            const words = name.split(/[\s\-&/]+/);
+            if (words.some(w => w.startsWith(query))) return 2;
+            if (desc.startsWith(query)) return 3;
+            if (desc.split(/[\s\-&/]+/).some(w => w.startsWith(query))) return 4;
+            return 5;
+          };
+
+          const scoreA = getScore(nameA, descA);
+          const scoreB = getScore(nameB, descB);
+
+          if (scoreA !== scoreB) {
+            return scoreA - scoreB;
+          }
+
+          return nameA.localeCompare(nameB);
         });
     }
 
