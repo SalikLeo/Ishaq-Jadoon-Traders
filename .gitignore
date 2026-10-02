@@ -1,0 +1,10 @@
+node_modules/
+dist/
+scratch/
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.log
+.DS_Store
+Thumbs.db
