@@ -22,11 +22,15 @@ const Expenses = {
           <h2 class="text-3xl font-bold text-slate-800">Expenses</h2>
         </div>
         <div class="flex items-center gap-2">
+          <button onclick="Expenses.toggleStats()" id="exp-stats-toggle-btn" class="h-10 px-3.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow transition-all active:scale-95 cursor-pointer">
+            <i data-lucide="eye" class="w-4 h-4 text-slate-400" id="exp-stats-toggle-icon"></i>
+            <span id="exp-stats-toggle-text">Show Stats</span>
+          </button>
+          <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
           <button onclick="Expenses.printExpenses()" class="h-10 px-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow transition-all active:scale-95 border border-slate-900 cursor-pointer">
             <i data-lucide="printer" class="w-4 h-4 text-amber-400"></i>
             <span>Print</span>
           </button>
-          <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
           <button onclick="Expenses.openCategoryModal()" class="h-10 px-3.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow transition-all active:scale-95 cursor-pointer">
             <i data-lucide="tag" class="w-4 h-4 text-slate-400"></i>
             <span>Categories</span>
@@ -39,7 +43,7 @@ const Expenses = {
       </div>
 
       <!-- Summary Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="exp-summary">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 hidden" id="exp-summary">
         <!-- Dynamically rendered -->
       </div>
 
@@ -289,6 +293,18 @@ const Expenses = {
 
     this.updateDropdowns();
     this.setPeriodType('day');
+  },
+
+  toggleStats() {
+    const container = document.getElementById('exp-summary');
+    if (!container) return;
+    container.classList.toggle('hidden');
+    const isHidden = container.classList.contains('hidden');
+    const textEl = document.getElementById('exp-stats-toggle-text');
+    const iconEl = document.getElementById('exp-stats-toggle-icon');
+    if (textEl) textEl.textContent = isHidden ? 'Show Stats' : 'Hide Stats';
+    if (iconEl) iconEl.setAttribute('data-lucide', isHidden ? 'eye' : 'eye-off');
+    if (window.lucide) lucide.createIcons();
   },
 
   updateSummary(list) {
