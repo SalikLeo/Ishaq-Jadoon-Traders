@@ -140,11 +140,11 @@ window.SalesForm = {
       <div class="flex flex-col h-full bg-slate-100 overflow-hidden select-none" id="sales-form-root">
         
         <!-- Top Status Bar & Invoice Header -->
-        <div class="bg-slate-900 text-white px-5 py-2 flex justify-between items-center shrink-0 shadow-md flex-wrap gap-2">
+        <div class="bg-slate-900 text-white px-5 py-2.5 flex justify-between items-center shrink-0 shadow-md flex-wrap gap-2">
           <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-              <h2 class="text-base font-black tracking-tight text-white flex items-center gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-amber-400 shadow-xs"></span>
+              <h2 class="text-lg font-black tracking-wide uppercase text-white flex items-center gap-2">
                 ${this.editingSaleId ? `<span class="text-blue-400">EDIT INVOICE</span> #${this.saleNumber}` : 'ISHAQ JADOON TRADERS'}
               </h2>
             </div>
