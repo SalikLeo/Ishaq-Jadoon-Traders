@@ -100,13 +100,13 @@ const Customers = window.Customers = {
               <table class="w-full text-left border-collapse">
                 <thead class="bg-slate-50 sticky top-0 z-10 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase tracking-wider">
                   <tr>
-                    <th class="py-2.5 px-2.5 w-8 text-center border-r border-slate-200/80">#</th>
-                    <th class="py-2.5 px-3 border-r border-slate-200/80">Customer Name (Phone)</th>
-                    <th class="py-2.5 px-3 text-right border-r border-slate-200/80 w-28">Khata Due</th>
+                    <th class="py-2.5 px-2.5 w-8 text-center border-r border-slate-200">#</th>
+                    <th class="py-2.5 px-3 border-r border-slate-200">Customer Name (Phone)</th>
+                    <th class="py-2.5 px-3 text-right border-r border-slate-200 w-28">Khata Due</th>
                     <th class="py-2.5 px-2 text-center w-16">Action</th>
                   </tr>
                 </thead>
-                <tbody id="customers-table-body" class="divide-y divide-slate-100 text-xs">
+                <tbody id="customers-table-body" class="divide-y divide-slate-200 bg-white text-xs">
                   <!-- Injected via renderList() -->
                 </tbody>
               </table>
@@ -161,18 +161,18 @@ const Customers = window.Customers = {
               <table class="w-full text-left border-collapse text-xs">
                 <thead class="bg-slate-50 sticky top-0 z-10 border-b border-slate-200 text-[10px] font-black text-slate-500 uppercase tracking-wider shadow-sm">
                   <tr>
-                    <th class="py-2.5 px-3 border-r border-slate-200/80 w-10 text-center">#</th>
-                    <th class="py-2.5 px-3 border-r border-slate-200/80">Date & Time</th>
-                    <th class="py-2.5 px-3 border-r border-slate-200/80">Type / Ref #</th>
-                    <th class="py-2.5 px-2.5 text-center border-r border-slate-200/80">Method</th>
-                    <th class="py-2.5 px-3 text-right border-r border-slate-200/80">Billed (Rs.)</th>
-                    <th class="py-2.5 px-3 text-right border-r border-slate-200/80">Received (Rs.)</th>
-                    <th class="py-2.5 px-3 text-right border-r border-slate-200/80">Due (Rs.)</th>
-                    <th class="py-2.5 px-3 border-r border-slate-200/80">Description</th>
+                    <th class="py-2.5 px-3 border-r border-slate-200 w-10 text-center">#</th>
+                    <th class="py-2.5 px-3 border-r border-slate-200">Date & Time</th>
+                    <th class="py-2.5 px-3 border-r border-slate-200">Type / Ref #</th>
+                    <th class="py-2.5 px-2.5 text-center border-r border-slate-200">Method</th>
+                    <th class="py-2.5 px-3 text-right border-r border-slate-200">Billed (Rs.)</th>
+                    <th class="py-2.5 px-3 text-right border-r border-slate-200">Received (Rs.)</th>
+                    <th class="py-2.5 px-3 text-right border-r border-slate-200">Due (Rs.)</th>
+                    <th class="py-2.5 px-3 border-r border-slate-200">Description</th>
                     <th class="py-2.5 px-2 text-center w-24">Action</th>
                   </tr>
                 </thead>
-                <tbody id="right-ledger-tbody" class="divide-y divide-slate-100">
+                <tbody id="right-ledger-tbody" class="divide-y divide-slate-200 bg-white">
                   <tr>
                     <td colspan="9" class="py-16 text-center text-slate-400 font-medium">
                       <i data-lucide="user-check" class="w-10 h-10 mx-auto mb-2 opacity-30 text-slate-400"></i>
@@ -367,24 +367,24 @@ const Customers = window.Customers = {
 
       return `
         <tr onclick="Customers.selectCustomer(${c.id})" 
-            class="transition-all cursor-pointer select-none ${isSelected ? 'bg-amber-500/15 border-l-4 border-l-amber-500 font-bold' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}">
+            class="transition-all cursor-pointer select-none border-b border-slate-200 ${isSelected ? 'bg-amber-100/90 border-l-[5px] border-l-amber-600 font-black text-slate-950 ring-1 ring-inset ring-amber-300/80 shadow-xs' : 'hover:bg-slate-50 border-l-[5px] border-l-transparent'}">
           <!-- Row # -->
-          <td class="py-2.5 px-2.5 text-center font-bold text-slate-400 tabular-nums border-r border-slate-100 text-xs">
+          <td class="py-2.5 px-2.5 text-center font-bold text-slate-400 tabular-nums border-r border-slate-200 text-xs">
             ${idx + 1}
           </td>
 
           <!-- Customer Name (Phone in brackets) -->
-          <td class="py-2.5 px-3 border-r border-slate-100">
+          <td class="py-2.5 px-3 border-r border-slate-200">
             <div class="flex flex-col min-w-0">
-              <div class="font-black text-slate-900 uppercase text-xs truncate leading-snug">
-                ${c.name} <span class="text-slate-500 font-bold text-xs">(${c.phone || 'No Phone'})</span>
+              <div class="font-black ${isSelected ? 'text-slate-950' : 'text-slate-900'} uppercase text-xs truncate leading-snug">
+                ${c.name} <span class="${isSelected ? 'text-slate-700 font-bold' : 'text-slate-500 font-bold'} text-xs">(${c.phone || 'No Phone'})</span>
               </div>
-              ${c.address ? `<span class="text-[11px] text-slate-400 font-medium truncate">${c.address}</span>` : ''}
+              ${c.address ? `<span class="text-[11px] ${isSelected ? 'text-slate-600 font-semibold' : 'text-slate-400 font-medium'} truncate">${c.address}</span>` : ''}
             </div>
           </td>
 
           <!-- Khata Due Amount -->
-          <td class="py-2.5 px-3 text-right border-r border-slate-100 font-black font-display text-xs ${isDue ? 'text-rose-600' : 'text-slate-700'} tabular-nums">
+          <td class="py-2.5 px-3 text-right border-r border-slate-200 font-black font-display text-xs ${isDue ? 'text-rose-600' : (isSelected ? 'text-slate-900' : 'text-slate-700')} tabular-nums">
             ${app.formatCurrency(balance)}
           </td>
 
@@ -545,27 +545,27 @@ const Customers = window.Customers = {
         const hasDue = item.due > 0.01;
 
         return `
-        <tr class="hover:bg-slate-50/80 transition-colors border-b border-slate-100">
-          <td class="py-2.5 px-3 font-bold text-slate-400 text-center border-r border-slate-100 tabular-nums">${idx + 1}</td>
-          <td class="py-2.5 px-3 font-semibold text-slate-700 whitespace-nowrap border-r border-slate-100">${app.formatDateTime(item.date)}</td>
-          <td class="py-2.5 px-3 font-black text-slate-900 border-r border-slate-100 whitespace-nowrap">
+        <tr class="hover:bg-slate-50/80 transition-colors border-b border-slate-200">
+          <td class="py-2.5 px-3 font-bold text-slate-400 text-center border-r border-slate-200 tabular-nums">${idx + 1}</td>
+          <td class="py-2.5 px-3 font-semibold text-slate-700 whitespace-nowrap border-r border-slate-200">${app.formatDateTime(item.date)}</td>
+          <td class="py-2.5 px-3 font-black text-slate-900 border-r border-slate-200 whitespace-nowrap">
             <span class="${item.type === 'Payment' ? 'text-emerald-700' : 'text-slate-900'}">${item.ref}</span>
           </td>
-          <td class="py-2.5 px-2.5 text-center border-r border-slate-100">
+          <td class="py-2.5 px-2.5 text-center border-r border-slate-200">
             <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tight ${item.method?.toLowerCase() === 'online' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-100 text-slate-700 border border-slate-200'}">
               ${item.method || 'Cash'}
             </span>
           </td>
-          <td class="py-2.5 px-3 text-right font-black text-slate-900 font-display border-r border-slate-100 tabular-nums">
+          <td class="py-2.5 px-3 text-right font-black text-slate-900 font-display border-r border-slate-200 tabular-nums">
             ${item.billed > 0 ? app.formatCurrency(item.billed) : '-'}
           </td>
-          <td class="py-2.5 px-3 text-right font-black text-emerald-600 font-display border-r border-slate-100 tabular-nums">
+          <td class="py-2.5 px-3 text-right font-black text-emerald-600 font-display border-r border-slate-200 tabular-nums">
             ${item.received > 0 ? app.formatCurrency(item.received) : '-'}
           </td>
-          <td class="py-2.5 px-3 text-right font-black ${hasDue ? 'text-rose-600' : 'text-slate-700'} font-display border-r border-slate-100 tabular-nums">
+          <td class="py-2.5 px-3 text-right font-black ${hasDue ? 'text-rose-600' : 'text-slate-700'} font-display border-r border-slate-200 tabular-nums">
             ${hasDue ? app.formatCurrency(item.due) : '-'}
           </td>
-          <td class="py-2.5 px-3 text-slate-600 font-medium text-[11px] truncate max-w-[180px] border-r border-slate-100" title="${item.desc}">
+          <td class="py-2.5 px-3 text-slate-600 font-medium text-[11px] truncate max-w-[180px] border-r border-slate-200" title="${item.desc}">
             ${item.desc}
           </td>
           <td class="py-2 px-2 text-center whitespace-nowrap">
