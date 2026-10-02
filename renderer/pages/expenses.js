@@ -16,6 +16,9 @@ const Expenses = {
   },
 
   async render(container, args) {
+    const savedShowStats = window.storage.get('expenses_show_stats');
+    const isStatsVisible = savedShowStats !== null ? Boolean(savedShowStats) : true;
+
     container.innerHTML = `
       <div class="flex justify-between items-center mb-6 no-print flex-wrap gap-4">
         <div class="flex items-center gap-3">
@@ -26,8 +29,8 @@ const Expenses = {
         </div>
         <div class="flex items-center gap-2">
           <button onclick="Expenses.toggleStats()" id="exp-stats-toggle-btn" class="h-10 px-3.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow transition-all active:scale-95 cursor-pointer">
-            <i data-lucide="eye" class="w-4 h-4 text-slate-400" id="exp-stats-toggle-icon"></i>
-            <span id="exp-stats-toggle-text">Show Stats</span>
+            <i data-lucide="${isStatsVisible ? 'eye-off' : 'eye'}" class="w-4 h-4 text-slate-400" id="exp-stats-toggle-icon"></i>
+            <span id="exp-stats-toggle-text">${isStatsVisible ? 'Hide Stats' : 'Show Stats'}</span>
           </button>
           <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
           <button onclick="Expenses.printExpenses()" class="h-10 px-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow transition-all active:scale-95 border border-slate-900 cursor-pointer">
@@ -46,7 +49,7 @@ const Expenses = {
       </div>
 
       <!-- Summary Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 hidden" id="exp-summary">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ${isStatsVisible ? '' : 'hidden'}" id="exp-summary">
         <!-- Dynamically rendered -->
       </div>
 
@@ -303,6 +306,7 @@ const Expenses = {
     if (!container) return;
     container.classList.toggle('hidden');
     const isHidden = container.classList.contains('hidden');
+    window.storage.set('expenses_show_stats', !isHidden);
     const textEl = document.getElementById('exp-stats-toggle-text');
     const iconEl = document.getElementById('exp-stats-toggle-icon');
     if (textEl) textEl.textContent = isHidden ? 'Show Stats' : 'Hide Stats';

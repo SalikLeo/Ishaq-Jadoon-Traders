@@ -4,6 +4,9 @@ window.Proposals = {
   currentPeriodType: 'day',
 
   async render(container) {
+    const savedShowStats = window.storage.get('sales_show_stats');
+    const isStatsVisible = savedShowStats !== null ? Boolean(savedShowStats) : true;
+
     container.innerHTML = `
       <div class="flex justify-between items-center mb-6">
         <div class="flex items-center gap-3">
@@ -18,14 +21,14 @@ window.Proposals = {
             <span>Item Sales</span>
           </button>
           <button onclick="Proposals.toggleStats()" id="stats-toggle-btn" class="h-10 px-3.5 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-sm rounded-xl flex items-center gap-2 shadow-sm hover:shadow transition-all active:scale-95 cursor-pointer">
-            <i data-lucide="eye" class="w-4 h-4 text-slate-400" id="stats-toggle-icon"></i>
-            <span id="stats-toggle-text">Show Stats</span>
+            <i data-lucide="${isStatsVisible ? 'eye-off' : 'eye'}" class="w-4 h-4 text-slate-400" id="stats-toggle-icon"></i>
+            <span id="stats-toggle-text">${isStatsVisible ? 'Hide Stats' : 'Show Stats'}</span>
           </button>
         </div>
       </div>
       
       <!-- Proper Stats Cards: Total Purchase Cost, Total Sale, Total Profit, Orders, Discounts -->
-      <div id="stats-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 hidden">
+      <div id="stats-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 ${isStatsVisible ? '' : 'hidden'}">
         <div class="bg-white p-3.5 rounded-xl shadow-sm border border-slate-200 flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
             <i data-lucide="shopping-bag" class="w-5 h-5"></i>
@@ -402,8 +405,11 @@ window.Proposals = {
     if (!container) return;
     container.classList.toggle('hidden');
     const isHidden = container.classList.contains('hidden');
-    document.getElementById('stats-toggle-text').textContent = isHidden ? 'Show Stats' : 'Hide Stats';
-    document.getElementById('stats-toggle-icon').setAttribute('data-lucide', isHidden ? 'eye' : 'eye-off');
+    window.storage.set('sales_show_stats', !isHidden);
+    const textEl = document.getElementById('stats-toggle-text');
+    const iconEl = document.getElementById('stats-toggle-icon');
+    if (textEl) textEl.textContent = isHidden ? 'Show Stats' : 'Hide Stats';
+    if (iconEl) iconEl.setAttribute('data-lucide', isHidden ? 'eye' : 'eye-off');
     if (window.lucide) lucide.createIcons();
   },
 
