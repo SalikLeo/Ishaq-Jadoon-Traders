@@ -1507,11 +1507,42 @@ const MasterDB = {
         return matchesSearch && matchesStatus;
      });
 
-     if (sort === 'date_desc') filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
-     else if (sort === 'date_asc') filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
-     else if (sort === 'profit_desc') filtered.sort((a,b) => (b.profit || 0) - (a.profit || 0));
-     else if (sort === 'profit_asc') filtered.sort((a,b) => (a.profit || 0) - (b.profit || 0));
-     else if (sort === 'total_desc') filtered.sort((a,b) => (b.retail_total || 0) - (a.retail_total || 0));
+     if (term) {
+       filtered.sort((a, b) => {
+         const custA = String(a.customer_name || '').toLowerCase();
+         const custB = String(b.customer_name || '').toLowerCase();
+         const numA = String(a.proposal_number || '').toLowerCase();
+         const numB = String(b.proposal_number || '').toLowerCase();
+
+         const getScore = (cust, num) => {
+           if (cust.startsWith(term) || num.startsWith(term)) return 1;
+           const words = cust.split(/[\s\-&/]+/);
+           if (words.some(w => w.startsWith(term))) return 2;
+           if (num.includes(term)) return 3;
+           return 4;
+         };
+
+         const scoreA = getScore(custA, numA);
+         const scoreB = getScore(custB, numB);
+
+         if (scoreA !== scoreB) {
+           return scoreA - scoreB;
+         }
+
+         if (sort === 'date_desc') return new Date(b.date) - new Date(a.date);
+         if (sort === 'date_asc') return new Date(a.date) - new Date(b.date);
+         if (sort === 'profit_desc') return (b.profit || 0) - (a.profit || 0);
+         if (sort === 'profit_asc') return (a.profit || 0) - (b.profit || 0);
+         if (sort === 'total_desc') return (b.retail_total || 0) - (a.retail_total || 0);
+         return 0;
+       });
+     } else {
+       if (sort === 'date_desc') filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+       else if (sort === 'date_asc') filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
+       else if (sort === 'profit_desc') filtered.sort((a,b) => (b.profit || 0) - (a.profit || 0));
+       else if (sort === 'profit_asc') filtered.sort((a,b) => (a.profit || 0) - (b.profit || 0));
+       else if (sort === 'total_desc') filtered.sort((a,b) => (b.retail_total || 0) - (a.retail_total || 0));
+     }
 
      this.renderProfitsList(filtered);
      
@@ -1728,6 +1759,22 @@ const MasterDB = {
     
     // Sort
     data.sort((a, b) => {
+        if (query) {
+          const nameA = (a.description || '').toLowerCase();
+          const nameB = (b.description || '').toLowerCase();
+          const getScore = (name) => {
+            if (name.startsWith(query)) return 1;
+            const words = name.split(/[\s\-&/]+/);
+            if (words.some(w => w.startsWith(query))) return 2;
+            return 3;
+          };
+          const scoreA = getScore(nameA);
+          const scoreB = getScore(nameB);
+          if (scoreA !== scoreB) {
+            return scoreA - scoreB;
+          }
+        }
+
         if (sortBy === 'revenue_desc') return b.total_revenue - a.total_revenue;
         if (sortBy === 'revenue_asc') return a.total_revenue - b.total_revenue;
         if (sortBy === 'qty_desc') return b.total_qty - a.total_qty;
@@ -2497,6 +2544,22 @@ const MasterDB = {
 
     // Sorting
     filtered.sort((a, b) => {
+      if (q) {
+        const nameA = (a.item_name || '').toLowerCase();
+        const nameB = (b.item_name || '').toLowerCase();
+        const getScore = (name) => {
+          if (name.startsWith(q)) return 1;
+          const words = name.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(q))) return 2;
+          return 3;
+        };
+        const scoreA = getScore(nameA);
+        const scoreB = getScore(nameB);
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+      }
+
       if (sort === 'name_asc') return a.item_name.localeCompare(b.item_name);
       if (sort === 'margin_desc') return (b.profit_margin_pct || 0) - (a.profit_margin_pct || 0);
       if (sort === 'profit_desc') return (b.profit || 0) - (a.profit || 0);

@@ -894,37 +894,44 @@ window.SalesForm = {
 
     const all = this.availableItems || [];
 
-    // Filter items starting with search query (item name starts with q, or word in item name starts with q)
+    // Filter all matching products (name, description, company, category)
     let matches = all.filter(i => {
       const name = (i.item_name || '').toLowerCase();
-      if (name.startsWith(q)) return true;
-      const words = name.split(/\s+/);
-      return words.some(w => w.startsWith(q));
+      const desc = (i.description || '').toLowerCase();
+      const comp = (i.company_name || '').toLowerCase();
+      const cat = (this.getCategoryName(i) || '').toLowerCase();
+      const slug = (i.slug || '').toLowerCase();
+      return name.includes(q) || desc.includes(q) || comp.includes(q) || cat.includes(q) || slug.includes(q);
     });
 
-    // Fallback to substring matching if no prefix match found
-    if (matches.length === 0) {
-      matches = all.filter(i => {
-        const name = (i.item_name || '').toLowerCase();
-        const desc = (i.description || '').toLowerCase();
-        const comp = (i.company_name || '').toLowerCase();
-        const cat = (this.getCategoryName(i) || '').toLowerCase();
-        const slug = (i.slug || '').toLowerCase();
-        return name.includes(q) || desc.includes(q) || comp.includes(q) || cat.includes(q) || slug.includes(q);
-      });
-    }
-
-    // Sort results alphabetically (A-Z) by item_name, prioritizing direct name prefix match
+    // Priority sort by search relevance:
+    // 1. item_name starts with query (e.g. "Catry..." when typing "cat")
+    // 2. any word in item_name starts with query
+    // 3. description or company starts with query
+    // 4. word in description starts with query
+    // 5. general substring match
     matches.sort((a, b) => {
       const nameA = (a.item_name || '').toLowerCase();
       const nameB = (b.item_name || '').toLowerCase();
-      
-      const startsA = nameA.startsWith(q);
-      const startsB = nameB.startsWith(q);
-      
-      if (startsA && !startsB) return -1;
-      if (!startsA && startsB) return 1;
-      
+      const descA = (a.description || '').toLowerCase();
+      const descB = (b.description || '').toLowerCase();
+
+      const getScore = (name, desc) => {
+        if (name.startsWith(q)) return 1;
+        const words = name.split(/[\s\-&/]+/);
+        if (words.some(w => w.startsWith(q))) return 2;
+        if (desc.startsWith(q)) return 3;
+        if (desc.split(/[\s\-&/]+/).some(w => w.startsWith(q))) return 4;
+        return 5;
+      };
+
+      const scoreA = getScore(nameA, descA);
+      const scoreB = getScore(nameB, descB);
+
+      if (scoreA !== scoreB) {
+        return scoreA - scoreB;
+      }
+
       return nameA.localeCompare(nameB);
     });
 

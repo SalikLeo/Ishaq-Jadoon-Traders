@@ -417,6 +417,30 @@ const Expenses = {
     });
 
     filtered.sort((a, b) => {
+      if (term) {
+        const descA = (a.description || '').toLowerCase();
+        const descB = (b.description || '').toLowerCase();
+        const catA = (a.category || '').toLowerCase();
+        const catB = (b.category || '').toLowerCase();
+        const paidA = (a.paid_by || '').toLowerCase();
+        const paidB = (b.paid_by || '').toLowerCase();
+
+        const getScore = (desc, cat, paid) => {
+          if (desc.startsWith(term)) return 1;
+          if (desc.split(/[\s\-&/]+/).some(w => w.startsWith(term))) return 2;
+          if (cat.startsWith(term) || paid.startsWith(term)) return 3;
+          if (cat.split(/[\s\-&/]+/).some(w => w.startsWith(term)) || paid.split(/[\s\-&/]+/).some(w => w.startsWith(term))) return 4;
+          return 5;
+        };
+
+        const scoreA = getScore(descA, catA, paidA);
+        const scoreB = getScore(descB, catB, paidB);
+
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+      }
+
       if (sortBy === 'date_desc') return (new Date(b.date || b.created_at) - new Date(a.date || a.created_at)) || (b.id - a.id);
       if (sortBy === 'date_asc') return (new Date(a.date || a.created_at) - new Date(b.date || b.created_at)) || (a.id - b.id);
       if (sortBy === 'amount_desc') return b.amount - a.amount;

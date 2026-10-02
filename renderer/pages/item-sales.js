@@ -551,6 +551,22 @@ window.ItemSales = {
 
     // 3. Sort grouped items
     groupedList.sort((a, b) => {
+      if (term) {
+        const nameA = (a.description || '').toLowerCase();
+        const nameB = (b.description || '').toLowerCase();
+        const getScore = (name) => {
+          if (name.startsWith(term)) return 1;
+          const words = name.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(term))) return 2;
+          return 3;
+        };
+        const scoreA = getScore(nameA);
+        const scoreB = getScore(nameB);
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+      }
+
       switch (this.currentSort) {
         case 'qty-desc': return b.totalQty - a.totalQty;
         case 'qty-asc': return a.totalQty - b.totalQty;

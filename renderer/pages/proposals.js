@@ -309,6 +309,32 @@ window.Proposals = {
         return matchesSearch && matchesMethod && matchesPeriod;
     });
 
+    if (term) {
+      filtered.sort((a, b) => {
+        const custA = (a.customer_name || '').toLowerCase();
+        const custB = (b.customer_name || '').toLowerCase();
+        const numA = (a.proposal_number || '').toLowerCase();
+        const numB = (b.proposal_number || '').toLowerCase();
+
+        const getScore = (cust, num) => {
+          if (cust.startsWith(term) || num.startsWith(term)) return 1;
+          const words = cust.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(term))) return 2;
+          if (num.includes(term)) return 3;
+          return 4;
+        };
+
+        const scoreA = getScore(custA, numA);
+        const scoreB = getScore(custB, numB);
+
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+
+        return (new Date(b.date || b.created_at) - new Date(a.date || a.created_at)) || (b.id - a.id);
+      });
+    }
+
     this.updateStats(filtered);
     this.renderList(filtered);
     this.updateClearPeriodButton();

@@ -677,6 +677,29 @@ window.Companies = {
 
     // Sort
     filtered.sort((a, b) => {
+      if (term) {
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
+        const phoneA = (a.phone || '').toLowerCase();
+        const phoneB = (b.phone || '').toLowerCase();
+
+        const getScore = (name, phone) => {
+          if (name.startsWith(term)) return 1;
+          const words = name.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(term))) return 2;
+          if (phone.startsWith(term)) return 3;
+          if (phone.includes(term)) return 4;
+          return 5;
+        };
+
+        const scoreA = getScore(nameA, phoneA);
+        const scoreB = getScore(nameB, phoneB);
+
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+      }
+
       if (sortBy === 'balance_desc') return (b.amount || 0) - (a.amount || 0);
       if (sortBy === 'balance_asc') return (a.amount || 0) - (b.amount || 0);
       if (sortBy === 'name_asc') return (a.name || '').localeCompare(b.name || '');
@@ -1728,6 +1751,32 @@ window.Companies = {
 
       return true;
     });
+
+    if (query) {
+      filtered.sort((a, b) => {
+        const nameA = (a.entityName || '').toLowerCase();
+        const nameB = (b.entityName || '').toLowerCase();
+        const invA = (a.invoice_no ? `${a.invoice_prefix || ''}-${a.invoice_no}` : '').toLowerCase();
+        const invB = (b.invoice_no ? `${b.invoice_prefix || ''}-${b.invoice_no}` : '').toLowerCase();
+
+        const getScore = (name, inv) => {
+          if (name.startsWith(query) || inv.startsWith(query)) return 1;
+          const words = name.split(/[\s\-&/]+/);
+          if (words.some(w => w.startsWith(query))) return 2;
+          if (inv.includes(query)) return 3;
+          return 4;
+        };
+
+        const scoreA = getScore(nameA, invA);
+        const scoreB = getScore(nameB, invB);
+
+        if (scoreA !== scoreB) {
+          return scoreA - scoreB;
+        }
+
+        return new Date(b.date || 0) - new Date(a.date || 0);
+      });
+    }
 
     this.renderTransactionsList(filtered);
     this.updateTransactionsStats(filtered);
