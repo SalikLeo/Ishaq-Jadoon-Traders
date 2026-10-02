@@ -18,7 +18,7 @@ window.Reports = {
     container.innerHTML = `
       <div class="max-w-4xl mx-auto">
         <div class="mb-8 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center shrink-0 shadow-2xs">
             <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
           </div>
           <h2 class="text-3xl font-black text-slate-800 tracking-tight">Financial Reports</h2>

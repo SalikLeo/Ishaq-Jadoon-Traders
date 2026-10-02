@@ -30,7 +30,7 @@ const RateList = {
         <!-- Top Bar Header -->
         <div class="flex flex-wrap items-center justify-between gap-4 shrink-0 no-print">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center shrink-0 shadow-2xs">
               <i data-lucide="tags" class="w-5 h-5"></i>
             </div>
             <h2 class="text-3xl font-bold text-slate-800">Rate List & Cost Analysis</h2>

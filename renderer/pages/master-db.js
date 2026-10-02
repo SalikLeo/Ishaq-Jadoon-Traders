@@ -48,7 +48,7 @@ const MasterDB = {
       <div class="flex justify-between items-center mb-6 gap-4 no-print flex-wrap lg:flex-nowrap">
         <div class="flex items-center flex-1 max-w-2xl gap-3 min-w-[300px]">
           <div class="flex items-center gap-3 shrink-0">
-            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center shrink-0 shadow-2xs">
               <i data-lucide="database" class="w-5 h-5"></i>
             </div>
             <h1 class="text-3xl font-bold text-slate-800">Stock</h1>
