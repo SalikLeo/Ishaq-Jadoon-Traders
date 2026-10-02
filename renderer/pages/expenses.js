@@ -18,7 +18,10 @@ const Expenses = {
   async render(container, args) {
     container.innerHTML = `
       <div class="flex justify-between items-center mb-6 no-print flex-wrap gap-4">
-        <div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+          </div>
           <h2 class="text-3xl font-bold text-slate-800">Expenses</h2>
         </div>
         <div class="flex items-center gap-2">

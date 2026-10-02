@@ -11,7 +11,10 @@ const Customers = window.Customers = {
       <div class="flex flex-col h-full max-h-full overflow-hidden">
         <!-- Top Title & Action Bar -->
         <div class="flex justify-between items-center mb-6 flex-wrap gap-4 shrink-0 no-print">
-          <div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
             <h2 class="text-3xl font-bold text-slate-800">Customers Khata</h2>
           </div>
           <div class="flex items-center gap-2 shrink-0">

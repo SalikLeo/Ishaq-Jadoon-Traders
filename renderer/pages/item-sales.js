@@ -19,6 +19,9 @@ window.ItemSales = {
               <i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i>
               <span>Sales History</span>
             </button>
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+              <i data-lucide="package" class="w-5 h-5"></i>
+            </div>
             <h2 class="text-3xl font-bold text-slate-800">Item Wise Sales</h2>
           </div>
         </div>

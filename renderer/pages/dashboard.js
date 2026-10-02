@@ -30,14 +30,19 @@ const Dashboard = {
 
     container.innerHTML = `
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 class="text-3xl font-black text-slate-800 tracking-tight font-display">Dashboard</h2>
-          <div class="flex items-center gap-2 mt-1.5 text-xs text-slate-500 font-semibold" id="dash-active-summary">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 shadow-2xs" id="dash-period-badge">
-              <i data-lucide="calendar" class="w-3 h-3 text-accent"></i>
-              <span id="dash-period-badge-text">Today</span>
-            </span>
-            <span id="dash-date-range-text" class="text-slate-500 font-medium truncate"></span>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shrink-0 shadow-sm">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-3xl font-black text-slate-800 tracking-tight font-display">Dashboard</h2>
+            <div class="flex items-center gap-2 mt-1 text-xs text-slate-500 font-semibold" id="dash-active-summary">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 shadow-2xs" id="dash-period-badge">
+                <i data-lucide="calendar" class="w-3 h-3 text-accent"></i>
+                <span id="dash-period-badge-text">Today</span>
+              </span>
+              <span id="dash-date-range-text" class="text-slate-500 font-medium truncate"></span>
+            </div>
           </div>
         </div>
 
