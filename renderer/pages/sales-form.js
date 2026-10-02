@@ -510,37 +510,8 @@ window.SalesForm = {
   },
 
   handleCustomerPhoneFocus() {
-    const input = document.getElementById('sf-customer-phone');
-    if (input && !input.readOnly) {
-      const val = (input.value || '').trim();
-      if (val.length > 0) {
-        this.onCustomerPhoneChange(val);
-      } else {
-        const dropdown = document.getElementById('sf-customer-dropdown');
-        if (dropdown) dropdown.classList.add('hidden');
-      }
-    }
-  },
-
-  onCustomerPhoneChange(val) {
-    this.customerPhone = val;
-    if (!this.customerId) {
-      const q = (val || '').trim().toLowerCase();
-      const dropdown = document.getElementById('sf-customer-dropdown');
-      if (q.length > 0) {
-        this.customerSearchResults = (this.customers || []).filter(c => {
-          const name = (c.name || '').toLowerCase();
-          const phone = (c.phone || '').toLowerCase();
-          const addr = (c.address || '').toLowerCase();
-          return phone.includes(q) || name.includes(q) || addr.includes(q);
-        }).slice(0, 15);
-        this.highlightedCustomerIndex = 0;
-        this.renderCustomerDropdown();
-      } else {
-        this.customerSearchResults = [];
-        if (dropdown) dropdown.classList.add('hidden');
-      }
-    }
+    const dropdown = document.getElementById('sf-customer-dropdown');
+    if (dropdown) dropdown.classList.add('hidden');
   },
 
   handleCustomerInput(val) {
@@ -556,8 +527,7 @@ window.SalesForm = {
       this.customerSearchResults = (this.customers || []).filter(c => {
         const name = (c.name || '').toLowerCase();
         const phone = (c.phone || '').toLowerCase();
-        const addr = (c.address || '').toLowerCase();
-        return name.includes(q) || phone.includes(q) || addr.includes(q);
+        return name.includes(q) || phone.includes(q);
       }).slice(0, 15);
     }
 
@@ -595,7 +565,6 @@ window.SalesForm = {
             <span class="w-5.5 h-5.5 rounded ${isHighlighted ? 'bg-white/25 text-white border border-white/30' : 'bg-slate-100 text-slate-600'} flex items-center justify-center text-xs font-black shrink-0 font-mono">${idx + 1}</span>
             <span class="text-sm font-black uppercase truncate ${isHighlighted ? 'text-white' : 'text-slate-900'}">${c.name}</span>
             ${c.phone ? `<span class="text-[13px] font-mono ${isHighlighted ? 'text-amber-100 font-bold' : 'text-slate-500'} shrink-0">(${c.phone})</span>` : ''}
-            ${c.address ? `<span class="text-xs ${isHighlighted ? 'text-amber-100/80' : 'text-slate-400'} truncate hidden sm:inline">• ${c.address}</span>` : ''}
           </div>
 
           <!-- Right side: Khata Balance Badge -->
