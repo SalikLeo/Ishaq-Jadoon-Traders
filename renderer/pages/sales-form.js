@@ -46,7 +46,6 @@ window.SalesForm = {
   },
 
   async render(container, args) {
-    this.discountType = 'flat';
     this.settings = await window.api.getSettings();
     this.customers = await window.api.getCustomers() || [];
     this.categoryLabels = await window.api.getCategoryLabels() || [];
@@ -76,10 +75,17 @@ window.SalesForm = {
     this.customerPhone = '';
     this.customerBalance = 0;
 
+    const savedDiscEnabled = window.storage ? window.storage.get('disc_enabled') : null;
+    const savedDiscType = window.storage ? window.storage.get('disc_type') : null;
+    const savedDiscValue = window.storage ? window.storage.get('disc_value') : null;
+    this.isDiscountEnabled = savedDiscEnabled !== null ? Boolean(savedDiscEnabled) : false;
+    this.discountType = savedDiscType || 'flat';
+    this.additionalDiscount = (savedDiscValue !== null && savedDiscValue !== undefined) ? savedDiscValue : '';
+
     const savedTaxEnabled = window.storage ? window.storage.get('tax_enabled') : null;
     const savedTaxPercent = window.storage ? window.storage.get('tax_percent') : null;
-    this.taxPercent = savedTaxPercent !== null ? parseFloat(savedTaxPercent) : 0.5;
-    this.isTaxEnabled = savedTaxEnabled !== null ? Boolean(savedTaxEnabled) : true;
+    this.taxPercent = savedTaxPercent !== null ? parseFloat(savedTaxPercent) : 2;
+    this.isTaxEnabled = savedTaxEnabled !== null ? Boolean(savedTaxEnabled) : false;
     
     if (this.editingSaleId) {
       const sale = await window.api.getProposal(this.editingSaleId);
@@ -340,25 +346,34 @@ window.SalesForm = {
               <!-- Left side: Additional Discount, Adv Tax & Summary Breakdown -->
               <div class="flex items-center gap-3 flex-wrap">
 
-                <!-- Additional Discount Input -->
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5">
-                  <span class="text-xs font-bold text-slate-600">Disc:</span>
-                  <div class="flex bg-slate-200 p-0.5 rounded-lg border border-slate-300/80">
-                    <button type="button" id="btn-disc-flat" onclick="SalesForm.toggleDiscountType('flat')" class="px-2 py-0.5 text-[10px] font-black rounded ${this.discountType === 'flat' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:text-slate-900'}">RS.</button>
-                    <button type="button" id="btn-disc-pct" onclick="SalesForm.toggleDiscountType('percent')" class="px-2 py-0.5 text-[10px] font-black rounded ${this.discountType === 'percent' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:text-slate-900'}">%</button>
+                <!-- Additional Discount Input (With Checkbox to show/hide) -->
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 transition-all">
+                  <label class="flex items-center gap-1.5 cursor-pointer select-none" title="Enable additional discount on bill">
+                    <input type="checkbox" 
+                           id="sf-disc-enable" 
+                           ${this.isDiscountEnabled ? 'checked' : ''} 
+                           onchange="SalesForm.toggleDiscountEnable(this.checked)" 
+                           class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300 accent-amber-600 cursor-pointer">
+                    <span class="text-xs font-bold text-slate-600">Disc:</span>
+                  </label>
+                  <div id="sf-disc-controls" class="${this.isDiscountEnabled ? 'flex' : 'hidden'} items-center gap-1.5">
+                    <div class="flex bg-slate-200 p-0.5 rounded-lg border border-slate-300/80">
+                      <button type="button" id="btn-disc-flat" onclick="SalesForm.toggleDiscountType('flat')" class="px-2 py-0.5 text-[10px] font-black rounded ${this.discountType === 'flat' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:text-slate-900'}">RS.</button>
+                      <button type="button" id="btn-disc-pct" onclick="SalesForm.toggleDiscountType('percent')" class="px-2 py-0.5 text-[10px] font-black rounded ${this.discountType === 'percent' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:text-slate-900'}">%</button>
+                    </div>
+                    <input type="number" 
+                           id="sf-additional-discount" 
+                           value="${this.additionalDiscount || ''}" 
+                           placeholder="0" 
+                           oninput="SalesForm.onAdditionalDiscountInput(this.value)" 
+                           min="0" 
+                           step="any" 
+                           class="w-16 bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-right font-black text-slate-900 focus:border-amber-500 outline-none">
                   </div>
-                  <input type="number" 
-                         id="sf-additional-discount" 
-                         value="${this.additionalDiscount || ''}" 
-                         placeholder="0" 
-                         oninput="SalesForm.updateSummary()" 
-                         min="0" 
-                         step="any" 
-                         class="w-16 bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-right font-black text-slate-900 focus:border-amber-500 outline-none">
                 </div>
 
-                <!-- Adv Tax Input (With Include Checkbox) -->
-                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5">
+                <!-- Adv Tax Input (With Checkbox to show/hide) -->
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 transition-all">
                   <label class="flex items-center gap-1.5 cursor-pointer select-none" title="Include tax in bill">
                     <input type="checkbox" 
                            id="sf-tax-enable" 
@@ -367,16 +382,17 @@ window.SalesForm = {
                            class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300 accent-amber-600 cursor-pointer">
                     <span class="text-xs font-bold text-slate-600">Tax:</span>
                   </label>
-                  <input type="number" 
-                         id="sf-tax-percent" 
-                         value="${this.taxPercent !== undefined ? this.taxPercent : 0.5}" 
-                         placeholder="0.5" 
-                         oninput="SalesForm.onTaxPercentInput()" 
-                         ${!this.isTaxEnabled ? 'disabled' : ''}
-                         min="0" 
-                         step="any" 
-                         class="w-16 min-w-[56px] bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-center font-black text-slate-900 focus:border-amber-500 outline-none disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
-                  <span class="text-xs font-black text-slate-500">%</span>
+                  <div id="sf-tax-controls" class="${this.isTaxEnabled ? 'flex' : 'hidden'} items-center gap-1">
+                    <input type="number" 
+                           id="sf-tax-percent" 
+                           value="${this.taxPercent !== undefined ? this.taxPercent : 2}" 
+                           placeholder="2" 
+                           oninput="SalesForm.onTaxPercentInput()" 
+                           min="0" 
+                           step="any" 
+                           class="w-14 bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-center font-black text-slate-900 focus:border-amber-500 outline-none">
+                    <span class="text-xs font-black text-slate-500">%</span>
+                  </div>
                 </div>
 
                 <!-- Received Amount (Partial / Full payment) -->
@@ -1532,8 +1548,31 @@ window.SalesForm = {
     if (window.lucide) lucide.createIcons();
   },
 
+  toggleDiscountEnable(enabled) {
+    this.isDiscountEnabled = Boolean(enabled);
+    if (window.storage) {
+      window.storage.set('disc_enabled', this.isDiscountEnabled);
+    }
+    const ctrl = document.getElementById('sf-disc-controls');
+    if (ctrl) {
+      if (this.isDiscountEnabled) {
+        ctrl.classList.remove('hidden');
+        ctrl.classList.add('flex');
+        const input = document.getElementById('sf-additional-discount');
+        if (input) input.focus();
+      } else {
+        ctrl.classList.remove('flex');
+        ctrl.classList.add('hidden');
+      }
+    }
+    this.updateSummary();
+  },
+
   toggleDiscountType(type) {
     this.discountType = type;
+    if (window.storage) {
+      window.storage.set('disc_type', type);
+    }
     const btnFlat = document.getElementById('btn-disc-flat');
     const btnPct = document.getElementById('btn-disc-pct');
     if (type === 'percent') {
@@ -1550,14 +1589,30 @@ window.SalesForm = {
     this.updateSummary();
   },
 
+  onAdditionalDiscountInput(val) {
+    this.additionalDiscount = val;
+    if (window.storage) {
+      window.storage.set('disc_value', val);
+    }
+    this.updateSummary();
+  },
+
   toggleTaxEnable(enabled) {
     this.isTaxEnabled = Boolean(enabled);
     if (window.storage) {
       window.storage.set('tax_enabled', this.isTaxEnabled);
     }
-    const taxInput = document.getElementById('sf-tax-percent');
-    if (taxInput) {
-      taxInput.disabled = !this.isTaxEnabled;
+    const ctrl = document.getElementById('sf-tax-controls');
+    if (ctrl) {
+      if (this.isTaxEnabled) {
+        ctrl.classList.remove('hidden');
+        ctrl.classList.add('flex');
+        const input = document.getElementById('sf-tax-percent');
+        if (input) input.focus();
+      } else {
+        ctrl.classList.remove('flex');
+        ctrl.classList.add('hidden');
+      }
     }
     this.updateSummary();
   },
@@ -1568,7 +1623,7 @@ window.SalesForm = {
       const parsedTax = parseFloat(taxInput.value);
       if (!isNaN(parsedTax)) {
         this.taxPercent = parsedTax;
-        if (window.storage && this.isTaxEnabled) {
+        if (window.storage) {
           window.storage.set('tax_percent', parsedTax);
         }
       }
@@ -1595,8 +1650,12 @@ window.SalesForm = {
     });
 
     let additionalDisc = 0;
+    const discCheckbox = document.getElementById('sf-disc-enable');
+    if (discCheckbox) {
+      this.isDiscountEnabled = discCheckbox.checked;
+    }
     const addDiscInput = document.getElementById('sf-additional-discount');
-    if (addDiscInput) {
+    if (this.isDiscountEnabled && addDiscInput) {
       const val = parseFloat(addDiscInput.value) || 0;
       if (val > 0) {
         if (this.discountType === 'percent') {
@@ -1615,11 +1674,11 @@ window.SalesForm = {
       this.isTaxEnabled = taxCheckbox.checked;
     }
 
-    let taxPercent = 0.5;
+    let taxPercent = 2;
     const taxInput = document.getElementById('sf-tax-percent');
     if (taxInput && taxInput.value !== '') {
       const parsedTax = parseFloat(taxInput.value);
-      taxPercent = !isNaN(parsedTax) ? parsedTax : 0.5;
+      taxPercent = !isNaN(parsedTax) ? parsedTax : 2;
     } else if (this.taxPercent !== undefined) {
       taxPercent = this.taxPercent;
     }
@@ -1803,8 +1862,10 @@ window.SalesForm = {
     });
 
     let additionalDisc = 0;
+    const discCheckbox = document.getElementById('sf-disc-enable');
+    const isDiscEnabled = discCheckbox ? discCheckbox.checked : this.isDiscountEnabled;
     const addDiscInput = document.getElementById('sf-additional-discount');
-    if (addDiscInput) {
+    if (isDiscEnabled && addDiscInput) {
       const val = parseFloat(addDiscInput.value) || 0;
       if (val > 0) {
         if (this.discountType === 'percent') {
@@ -1822,11 +1883,11 @@ window.SalesForm = {
     const taxCheckbox = document.getElementById('sf-tax-enable');
     const isTaxEnabled = taxCheckbox ? taxCheckbox.checked : this.isTaxEnabled;
 
-    let taxPercent = 0.5;
+    let taxPercent = 2;
     const taxInput = document.getElementById('sf-tax-percent');
     if (taxInput && taxInput.value !== '') {
       const parsedTax = parseFloat(taxInput.value);
-      taxPercent = !isNaN(parsedTax) ? parsedTax : 0.5;
+      taxPercent = !isNaN(parsedTax) ? parsedTax : 2;
     } else if (this.taxPercent !== undefined) {
       taxPercent = this.taxPercent;
     }
