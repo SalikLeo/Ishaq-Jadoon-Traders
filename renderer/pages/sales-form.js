@@ -324,7 +324,7 @@ window.SalesForm = {
                   <tr>
                     <th class="py-1.5 px-2 w-10 text-center border-r border-slate-300">#</th>
                     <th class="py-1.5 px-3 border-r border-slate-300">Item Description</th>
-                    <th class="py-1.5 px-2 w-24 text-center border-r border-slate-300">Qty</th>
+                    <th class="py-1.5 px-2 w-28 text-center border-r border-slate-300">Qty</th>
                     <th class="py-1.5 px-2 w-28 text-right border-r border-slate-300">Rate (Rs.)</th>
                     <th class="py-1.5 px-2 w-32 text-center border-r border-slate-300">Discount</th>
                     <th class="py-1.5 px-3 w-28 text-right border-r border-slate-300">Line Total</th>
@@ -1488,7 +1488,7 @@ window.SalesForm = {
 
           <!-- Qty Input with Unit -->
           <td class="py-1.5 px-2 text-center border-r border-slate-200">
-            <div class="flex items-center justify-center gap-1">
+            <div class="inline-flex items-center justify-center gap-1.5">
               <input type="number" 
                      id="cart-qty-input-${idx}"
                      value="${item.qty}"
@@ -1498,8 +1498,8 @@ window.SalesForm = {
                      onkeydown="SalesForm.handleCartKeyDown(event, ${idx}, 'qty')"
                      oninput="SalesForm.updateCartQty(${idx}, this.value, this)"
                      onblur="SalesForm.onCartQtyBlur(${idx}, this)"
-                     class="w-14 bg-transparent focus:bg-amber-100/70 border-b border-transparent focus:border-amber-500 text-center font-black text-slate-900 text-xs outline-none transition-colors tabular-nums py-0.5 rounded-sm">
-              <span class="text-[10px] font-bold text-slate-400 uppercase">${item.unit || 'pcs'}</span>
+                     class="w-12 bg-transparent focus:bg-amber-100/70 border-b border-transparent focus:border-amber-500 text-right font-black text-slate-900 text-xs outline-none transition-colors tabular-nums py-0.5 rounded-sm">
+              <span class="w-14 text-left text-[10px] font-bold text-slate-400 uppercase tracking-tight truncate shrink-0">${item.unit || 'pcs'}</span>
             </div>
           </td>
 
