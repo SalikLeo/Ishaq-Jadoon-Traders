@@ -2127,9 +2127,9 @@ window.SalesForm = {
             <span>TAX (${taxPercent}%):</span>
             <span style="font-weight: 800;">${app.formatAmount(taxAmount)}</span>
           </div>` : ''}
-          <div style="display: flex; justify-content: space-between; padding: 3px 0; border-top: 1.5px solid #000; border-bottom: 1.5px solid #000; margin-top: 3px; font-size: 13px; font-weight: 900;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; border-top: 1.5px solid #000; border-bottom: 1.5px solid #000; margin-top: 4px; font-size: 14.5px; font-weight: 900;">
             <span>TOTAL BILL:</span>
-            <span>Rs. ${app.formatAmount(grandTotal)}</span>
+            <span style="font-size: 16.5px; font-weight: 900;">Rs. ${app.formatAmount(grandTotal)}</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-top: 2px; font-size: 12px; font-weight: 900;">
             <span>RECEIVED (${paymentMethod.toUpperCase()}):</span>
