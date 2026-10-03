@@ -892,8 +892,17 @@ window.SalesForm = {
       return;
     }
 
-    const grandTotal = this.lastCalculatedGrandTotal || 0;
-    const diff = tendered - grandTotal;
+    // Calculate change to return against the actual Received payment amount
+    const recInput = document.getElementById('sf-received-amount');
+    let targetAmount = (this.receivedAmount !== undefined && this.receivedAmount !== null && !isNaN(Number(this.receivedAmount)))
+      ? Number(this.receivedAmount)
+      : (this.lastCalculatedGrandTotal || 0);
+
+    if (recInput && recInput.value !== '' && !isNaN(parseFloat(recInput.value))) {
+      targetAmount = parseFloat(recInput.value);
+    }
+
+    const diff = tendered - targetAmount;
 
     if (diff > 0) {
       badge.innerHTML = `Return: <span class="font-black">Rs. ${app.formatAmount(diff)}</span>`;
