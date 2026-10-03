@@ -559,7 +559,8 @@ function getProducts(category, companyId = null) {
     return searchAllProducts('', companyId);
   }
   let sql = `
-    SELECT p.*, c.name as company_name, (f.id IS NOT NULL) as is_favorite, '${category}' as slug 
+    SELECT p.*, c.name as company_name, (f.id IS NOT NULL) as is_favorite, '${category}' as slug,
+      (SELECT prh.purchase_price FROM product_rate_history prh WHERE prh.category_slug = '${category}' AND prh.product_id = p.id AND prh.purchase_price > 0 ORDER BY prh.id DESC LIMIT 1) as last_purchase_price
     FROM products_${category} p
     LEFT JOIN favorites f ON f.category_slug = '${category}' AND f.product_id = p.id
     LEFT JOIN companies c ON c.id = p.company_id
@@ -618,7 +619,8 @@ function searchAllProducts(query = '', companyId = null) {
     const cat = l.slug;
     const escapedLabel = (l.label || '').replace(/'/g, "''");
     let sql = `
-      SELECT p.*, c.name as company_name, (f.id IS NOT NULL) as is_favorite, '${cat}' as slug, '${escapedLabel}' as category_label
+      SELECT p.*, c.name as company_name, (f.id IS NOT NULL) as is_favorite, '${cat}' as slug, '${escapedLabel}' as category_label,
+        (SELECT prh.purchase_price FROM product_rate_history prh WHERE prh.category_slug = '${cat}' AND prh.product_id = p.id AND prh.purchase_price > 0 ORDER BY prh.id DESC LIMIT 1) as last_purchase_price
       FROM products_${cat} p 
       LEFT JOIN favorites f ON f.category_slug = '${cat}' AND f.product_id = p.id
       LEFT JOIN companies c ON c.id = p.company_id
