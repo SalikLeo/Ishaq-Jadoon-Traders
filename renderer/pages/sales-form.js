@@ -171,6 +171,12 @@ window.SalesForm = {
               <kbd class="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono text-[10px] font-black shadow-sm">F2</kbd> Items Search
             </span>
             <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700/80 text-[11px] font-bold text-slate-200 shadow-sm">
+              <kbd class="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono text-[10px] font-black shadow-sm">F3</kbd> Received
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700/80 text-[11px] font-bold text-slate-200 shadow-sm">
+              <kbd class="px-1.5 py-0.5 rounded bg-sky-400 text-slate-950 font-mono text-[10px] font-black shadow-sm">F4</kbd> Cash Rec.
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700/80 text-[11px] font-bold text-slate-200 shadow-sm">
               <kbd class="px-1.5 py-0.5 rounded bg-emerald-500 text-white font-mono text-[10px] font-black shadow-sm">F9</kbd> Complete
             </span>
             <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700/80 text-[11px] font-bold text-slate-200 shadow-sm">
@@ -397,7 +403,10 @@ window.SalesForm = {
 
                 <!-- Received Amount (Partial / Full payment) -->
                 <div class="flex items-center gap-2 bg-amber-50/70 border border-amber-300/80 rounded-xl px-3 py-1.5">
-                  <span class="text-xs font-black text-amber-900">Received (Rs.):</span>
+                  <span class="text-xs font-black text-amber-900 flex items-center gap-1">
+                    Received (Rs.):
+                    <kbd class="px-1 py-0.2 rounded bg-amber-200/90 text-amber-950 font-mono text-[9px] font-black border border-amber-300">F3</kbd>
+                  </span>
                   <input type="number" 
                          id="sf-received-amount" 
                          value="${this.receivedAmount || ''}" 
@@ -410,7 +419,10 @@ window.SalesForm = {
 
                 <!-- Cash Rec. (Quick Calculator for Customer Cash Handed & Change Return) -->
                 <div class="flex items-center gap-2 bg-sky-50/80 border border-sky-300/90 rounded-xl px-2.5 py-1.5 shadow-2xs">
-                  <span class="text-xs font-black text-sky-950">Cash Rec.:</span>
+                  <span class="text-xs font-black text-sky-950 flex items-center gap-1">
+                    Cash Rec.:
+                    <kbd class="px-1 py-0.2 rounded bg-sky-200/90 text-sky-950 font-mono text-[9px] font-black border border-sky-300">F4</kbd>
+                  </span>
                   <input type="number" 
                          id="sf-cash-tendered" 
                          value="${this.cashTendered || ''}" 
@@ -419,7 +431,7 @@ window.SalesForm = {
                          min="0" 
                          step="any" 
                          class="w-24 bg-white border border-sky-300 rounded-lg px-2 py-1 text-xs text-right font-black text-slate-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none font-display"
-                         title="Enter total cash given by customer to quickly calculate return change (no impact on sales)">
+                         title="Enter total cash given by customer to quickly calculate return change (Press F4)">
                   <span id="sf-return-change-badge" class="hidden text-xs font-black px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-display shadow-2xs tabular-nums"></span>
                 </div>
 
@@ -1792,6 +1804,20 @@ window.SalesForm = {
         if (searchInput) {
           searchInput.focus();
           searchInput.select();
+        }
+      } else if (e.key === 'F3') {
+        e.preventDefault();
+        const recInput = document.getElementById('sf-received-amount');
+        if (recInput) {
+          recInput.focus();
+          recInput.select();
+        }
+      } else if (e.key === 'F4') {
+        e.preventDefault();
+        const cashInput = document.getElementById('sf-cash-tendered');
+        if (cashInput) {
+          cashInput.focus();
+          cashInput.select();
         }
       } else if (e.key === 'F9' || (e.ctrlKey && e.key === 'Enter')) {
         e.preventDefault();
