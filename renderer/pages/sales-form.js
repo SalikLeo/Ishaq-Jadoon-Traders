@@ -57,6 +57,8 @@ window.SalesForm = {
     this.customerSearchResults = [];
     this.highlightedCustomerIndex = 0;
     this.isReceivedManuallyEdited = false;
+    this.cashTendered = '';
+    this.lastCalculatedGrandTotal = 0;
     
     // Fetch all items for instant client-side searching
     this.availableItems = await window.api.searchAllProducts('');
@@ -388,6 +390,21 @@ window.SalesForm = {
                          min="0" 
                          step="any" 
                          class="w-28 bg-white border border-amber-300 rounded-lg px-2.5 py-1 text-xs text-right font-black text-slate-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none font-display">
+                </div>
+
+                <!-- Cash Rec. (Quick Calculator for Customer Cash Handed & Change Return) -->
+                <div class="flex items-center gap-2 bg-sky-50/80 border border-sky-300/90 rounded-xl px-2.5 py-1.5 shadow-2xs">
+                  <span class="text-xs font-black text-sky-950">Cash Rec.:</span>
+                  <input type="number" 
+                         id="sf-cash-tendered" 
+                         value="${this.cashTendered || ''}" 
+                         placeholder="0" 
+                         oninput="SalesForm.onCashTenderedInput(this.value)" 
+                         min="0" 
+                         step="any" 
+                         class="w-24 bg-white border border-sky-300 rounded-lg px-2 py-1 text-xs text-right font-black text-slate-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none font-display"
+                         title="Enter total cash given by customer to quickly calculate return change (no impact on sales)">
+                  <span id="sf-return-change-badge" class="hidden text-xs font-black px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-display shadow-2xs tabular-nums"></span>
                 </div>
 
                 <!-- Subtotal, Discounts and Tax text -->
@@ -820,6 +837,49 @@ window.SalesForm = {
   setFullPayment() {
     this.isReceivedManuallyEdited = false;
     this.updateSummary();
+  },
+
+  onCashTenderedInput(val) {
+    this.cashTendered = val;
+    this.updateCashChangeReturn();
+  },
+
+  updateCashChangeReturn() {
+    const badge = document.getElementById('sf-return-change-badge');
+    if (!badge) return;
+
+    const tenderedInput = document.getElementById('sf-cash-tendered');
+    const tenderedStr = (this.cashTendered !== undefined && this.cashTendered !== null) 
+      ? String(this.cashTendered).trim() 
+      : (tenderedInput ? (tenderedInput.value || '').trim() : '');
+
+    if (tenderedStr === '') {
+      badge.classList.add('hidden');
+      return;
+    }
+
+    const tendered = parseFloat(tenderedStr);
+    if (isNaN(tendered) || tendered <= 0) {
+      badge.classList.add('hidden');
+      return;
+    }
+
+    const grandTotal = this.lastCalculatedGrandTotal || 0;
+    const diff = tendered - grandTotal;
+
+    if (diff > 0) {
+      badge.innerHTML = `Return: <span class="font-black">Rs. ${app.formatAmount(diff)}</span>`;
+      badge.className = 'text-xs font-black px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-display shadow-2xs tabular-nums';
+      badge.classList.remove('hidden');
+    } else if (diff === 0) {
+      badge.innerHTML = `<span>Exact Cash</span>`;
+      badge.className = 'text-xs font-black px-2 py-0.5 rounded-lg bg-slate-700 text-white font-display shadow-2xs tabular-nums';
+      badge.classList.remove('hidden');
+    } else {
+      badge.innerHTML = `Short: <span class="font-black">Rs. ${app.formatAmount(Math.abs(diff))}</span>`;
+      badge.className = 'text-xs font-black px-2 py-0.5 rounded-lg bg-amber-500 text-white font-display shadow-2xs tabular-nums';
+      badge.classList.remove('hidden');
+    }
   },
 
   getItemAvailableStock(item) {
@@ -1641,6 +1701,9 @@ window.SalesForm = {
         statusBadge.classList.add('hidden');
       }
     }
+
+    this.lastCalculatedGrandTotal = grandTotal;
+    this.updateCashChangeReturn();
   },
 
   setupGlobalShortcuts() {
