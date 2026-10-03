@@ -177,7 +177,7 @@ window.SalesForm = {
               <kbd class="px-1.5 py-0.5 rounded bg-sky-400 text-slate-950 font-mono text-[10px] font-black shadow-sm">F4</kbd> Cash Rec.
             </span>
             <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700/80 text-[11px] font-bold text-slate-200 shadow-sm">
-              <kbd class="px-1.5 py-0.5 rounded bg-emerald-500 text-white font-mono text-[10px] font-black shadow-sm">F9</kbd> Complete
+              <kbd class="px-1.5 py-0.5 rounded bg-emerald-500 text-white font-mono text-[10px] font-black shadow-sm">F5</kbd> Complete
             </span>
             <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700/80 text-[11px] font-bold text-slate-200 shadow-sm">
               <kbd class="px-1.5 py-0.5 rounded bg-slate-700 text-slate-300 font-mono text-[10px] font-black border border-slate-600">ESC</kbd> Back
@@ -476,7 +476,7 @@ window.SalesForm = {
                           onclick="SalesForm.completeSale(true)" 
                           class="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98] transition-all cursor-pointer">
                     <i data-lucide="printer" class="w-4 h-4 text-amber-400"></i>
-                    <span>SAVE & PRINT (F9)</span>
+                    <span>SAVE & PRINT (F5)</span>
                   </button>
                 ` : `
                   <button type="button" 
@@ -484,7 +484,7 @@ window.SalesForm = {
                           onclick="SalesForm.completeSale(true)" 
                           class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm flex items-center gap-3 shadow-lg hover:shadow-xl active:scale-[0.98] transition-all cursor-pointer">
                     <i data-lucide="check-circle" class="w-5 h-5 text-amber-400"></i>
-                    <span>COMPLETE & PRINT (F9)</span>
+                    <span>COMPLETE & PRINT (F5)</span>
                   </button>
                 `}
               </div>
@@ -1819,7 +1819,7 @@ window.SalesForm = {
           cashInput.focus();
           cashInput.select();
         }
-      } else if (e.key === 'F9' || (e.ctrlKey && e.key === 'Enter')) {
+      } else if (e.key === 'F5' || e.key === 'F9' || (e.ctrlKey && e.key === 'Enter')) {
         e.preventDefault();
         this.completeSale();
       }
